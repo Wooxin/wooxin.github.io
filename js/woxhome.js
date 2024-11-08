@@ -1,0 +1,1 @@
+function goBack(){window.history.back()}document.addEventListener("DOMContentLoaded",function(){var e=document.getElementById("home");[document.getElementById("post"),document.getElementById("page"),document.getElementById("archive"),document.getElementById("categories"),document.getElementById("tags")].some(e=>e)&&(e.style.display="none")});

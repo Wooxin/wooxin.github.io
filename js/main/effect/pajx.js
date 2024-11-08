@@ -1,0 +1,1 @@
+$(document).pjax("a","#pjax-container"),$(document).on("pjax:timeout",function(n){n.preventDefault()});
