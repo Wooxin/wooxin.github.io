@@ -1,0 +1,1 @@
+function openct(t){return"[+]"==t.innerHTML?($(t).attr("title","收起").html("[-]"),$(".toc-article ol").show()):($(t).attr("title","展开").html("[+]"),$(".toc-article ol").hide()),t.blur(),!1}
