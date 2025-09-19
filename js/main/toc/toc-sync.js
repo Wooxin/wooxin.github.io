@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",function(){let n=document.getElementById("recent-posts");if(n){let t=0;window.addEventListener("scroll",function(){var e=window.pageYOffset||document.documentElement.scrollTop;e>t?n.style.boxShadow="0 4px 12px rgba(0, 0, 0, 0.1)":n.style.boxShadow="0 2px 6px rgba(0, 0, 0, 0.05)",t=e})}});

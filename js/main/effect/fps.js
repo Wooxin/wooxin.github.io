@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",()=>{let t=0,o=performance.now(),r=document.querySelector("#fps"),a=0;requestAnimationFrame(function e(){t++;var n=performance.now();1e3<=n-o&&(a=t,r.textContent="FPS: "+a,o=n,t=0),requestAnimationFrame(e)})});

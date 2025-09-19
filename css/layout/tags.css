@@ -1,0 +1,1 @@
+#tags{height:100vh;max-height:100vh;overflow-y:auto;color:$font-home-main-hover}#tags .tag-list{cursor:pointer;display:grid;grid-template-columns:repeat(6,1fr);gap:10px}#tags .tag-list .tag-list-item .tag-list-count{right:5px}@media (max-width:800px){.tag-list{grid-template-columns:repeat(auto-fill,minmax(100px,1fr))}}
