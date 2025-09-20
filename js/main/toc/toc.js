@@ -1,1 +1,1 @@
-function openct(t){var e=document.getElementById("post-toc");return"[+]"==t.innerHTML?($(t).attr("title","收起").html("[-]"),$(".toc-article ol").show(),e.style.height="15rem"):($(t).attr("title","展开").html("[+]"),$(".toc-article ol").hide(),e.style.height="3rem"),t.blur(),!1}
+function openct(t){var e=document.getElementById("post-toc");return"[+]"==t.innerHTML?($(t).attr("title","收起").html("[-]"),$(".toc-article ol").show(),e.style.height="10rem"):($(t).attr("title","展开").html("[+]"),$(".toc-article ol").hide(),e.style.height="3rem"),t.blur(),!1}
