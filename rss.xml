@@ -147,9 +147,9 @@
     <category term="electron" scheme="https://wooxin.github.io/categories/%E6%95%99%E7%A8%8B/electron/"/>
     
     
-    <category term="electron" scheme="https://wooxin.github.io/tags/electron/"/>
-    
     <category term="pug" scheme="https://wooxin.github.io/tags/pug/"/>
+    
+    <category term="electron" scheme="https://wooxin.github.io/tags/electron/"/>
     
     <category term="stylus" scheme="https://wooxin.github.io/tags/stylus/"/>
     
@@ -220,11 +220,11 @@
     <category term="ArchLinux" scheme="https://wooxin.github.io/categories/Linux/ArchLinux/"/>
     
     
+    <category term="部署" scheme="https://wooxin.github.io/tags/%E9%83%A8%E7%BD%B2/"/>
+    
     <category term="Linux" scheme="https://wooxin.github.io/tags/Linux/"/>
     
     <category term="安装" scheme="https://wooxin.github.io/tags/%E5%AE%89%E8%A3%85/"/>
-    
-    <category term="部署" scheme="https://wooxin.github.io/tags/%E9%83%A8%E7%BD%B2/"/>
     
     <category term="ArchLinux" scheme="https://wooxin.github.io/tags/ArchLinux/"/>
     
@@ -318,13 +318,13 @@
     <category term="Game" scheme="https://wooxin.github.io/categories/Centos/Game/"/>
     
     
-    <category term="部署" scheme="https://wooxin.github.io/tags/%E9%83%A8%E7%BD%B2/"/>
-    
     <category term="SCPSL" scheme="https://wooxin.github.io/tags/SCPSL/"/>
     
     <category term="SXPSL" scheme="https://wooxin.github.io/tags/SXPSL/"/>
     
     <category term="开服" scheme="https://wooxin.github.io/tags/%E5%BC%80%E6%9C%8D/"/>
+    
+    <category term="部署" scheme="https://wooxin.github.io/tags/%E9%83%A8%E7%BD%B2/"/>
     
     <category term="游戏" scheme="https://wooxin.github.io/tags/%E6%B8%B8%E6%88%8F/"/>
     
@@ -392,9 +392,9 @@
     <category term="GLIB" scheme="https://wooxin.github.io/categories/Centos/GLIB/"/>
     
     
-    <category term="Centos" scheme="https://wooxin.github.io/tags/Centos/"/>
-    
     <category term="教程" scheme="https://wooxin.github.io/tags/%E6%95%99%E7%A8%8B/"/>
+    
+    <category term="Centos" scheme="https://wooxin.github.io/tags/Centos/"/>
     
     <category term="升级" scheme="https://wooxin.github.io/tags/%E5%8D%87%E7%BA%A7/"/>
     

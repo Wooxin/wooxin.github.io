@@ -122,9 +122,9 @@
       
         <tags>
             
-            <tag> electron </tag>
-            
             <tag> pug </tag>
+            
+            <tag> electron </tag>
             
             <tag> stylus </tag>
             
@@ -188,11 +188,11 @@
       
         <tags>
             
+            <tag> 部署 </tag>
+            
             <tag> Linux </tag>
             
             <tag> 安装 </tag>
-            
-            <tag> 部署 </tag>
             
             <tag> ArchLinux </tag>
             
@@ -277,13 +277,13 @@
       
         <tags>
             
-            <tag> 部署 </tag>
-            
             <tag> SCPSL </tag>
             
             <tag> SXPSL </tag>
             
             <tag> 开服 </tag>
+            
+            <tag> 部署 </tag>
             
             <tag> 游戏 </tag>
             
@@ -349,9 +349,9 @@
       
         <tags>
             
-            <tag> Centos </tag>
-            
             <tag> 教程 </tag>
+            
+            <tag> Centos </tag>
             
             <tag> 升级 </tag>
             
