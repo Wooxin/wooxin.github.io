@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",()=>{var e=document.querySelector(".colormode-div");let t=document.documentElement;var a=localStorage.getItem("theme")||"light";t.setAttribute("data-theme",a),e&&e.addEventListener("click",()=>{var e="dark"===t.getAttribute("data-theme")?"light":"dark";t.setAttribute("data-theme",e),localStorage.setItem("theme",e)})});

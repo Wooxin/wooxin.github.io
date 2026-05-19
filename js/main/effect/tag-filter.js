@@ -1,0 +1,1 @@
+window.addEventListener("load",function(){setTimeout(function(){document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){var t=document.querySelector(this.getAttribute("href"));t&&(e.preventDefault(),t.scrollIntoView({behavior:"smooth"}),history.replaceState(null,null,this.getAttribute("href")))})})},1e3)});
