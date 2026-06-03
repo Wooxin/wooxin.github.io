@@ -13,7 +13,15 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const cats = post.data.category || [];
 const tags = post.data.tags || [];
-const htmlContent = post.body;
+// Render markdown content
+let Content = null;
+let htmlFallback = '';
+try {
+  const rendered = await post.render();
+  Content = rendered.Content;
+} catch(e) {
+  htmlFallback = post.body || '';
+}
 const prevPost = null; // TODO: implement prev/next
 const nextPost = null;
 ---
@@ -55,7 +63,7 @@ const nextPost = null;
     </div>
     <div class="scrollable-container">
       <div id="post-content">
-        <div set:html={htmlContent} />
+        {Content ? <Content /> : <div set:html={htmlFallback}></div>}
         <hr />
         <div id="post-info">
           <div id="post-info-main">
