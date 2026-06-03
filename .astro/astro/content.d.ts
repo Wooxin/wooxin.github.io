@@ -141,9 +141,121 @@ declare module 'astro:content' {
 
 	type ContentEntryMap = {
 		"posts": {
+"2.-自制的Linux发行版.md": {
+	id: "2.-自制的Linux发行版.md";
+  slug: "2-自制的linux发行版";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
+"2.1-自制WSL下Linux发行版.md": {
+	id: "2.1-自制WSL下Linux发行版.md";
+  slug: "21-自制wsl下linux发行版";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
+"2.2-WSL发行版修改优化.md": {
+	id: "2.2-WSL发行版修改优化.md";
+  slug: "22-wsl发行版修改优化";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
+"ArchLinux速通Wayland-1.md": {
+	id: "ArchLinux速通Wayland-1.md";
+  slug: "archlinux速通wayland-1";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
+"Centos-Glib-Update.md": {
+	id: "Centos-Glib-Update.md";
+  slug: "centos-glib-update";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
+"ChatGPT-Paypal.md": {
+	id: "ChatGPT-Paypal.md";
+  slug: "chatgpt-paypal";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
+"NVM-Tutorial-1.md": {
+	id: "NVM-Tutorial-1.md";
+  slug: "nvm-tutorial-1";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
+"SXPSL-Tutorial-for-Centos7-1.md": {
+	id: "SXPSL-Tutorial-for-Centos7-1.md";
+  slug: "sxpsl-tutorial-for-centos7-1";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
+"electron-pug-stylus.md": {
+	id: "electron-pug-stylus.md";
+  slug: "electron-pug-stylus";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
+"reading-loding.md": {
+	id: "reading-loding.md";
+  slug: "reading-loding";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
+"reading-progress.md": {
+	id: "reading-progress.md";
+  slug: "reading-progress";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
+"rightmenu.md": {
+	id: "rightmenu.md";
+  slug: "rightmenu";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
+"telegram.md": {
+	id: "telegram.md";
+  slug: "telegram";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
+"wordCount.md": {
+	id: "wordCount.md";
+  slug: "wordcount";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
 "wsl-deploy.md": {
 	id: "wsl-deploy.md";
   slug: "wsl-deploy";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
+"杂谈---糟心事.md": {
+	id: "杂谈---糟心事.md";
+  slug: "杂谈---糟心事";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
+"杂谈---鸿蒙分区.md": {
+	id: "杂谈---鸿蒙分区.md";
+  slug: "杂谈---鸿蒙分区";
   body: string;
   collection: "posts";
   data: InferEntrySchema<"posts">
