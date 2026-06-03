@@ -118,13 +118,15 @@
   }
 })();
 
-// === SPA Navigation ===
+// === SPA Navigation (skip posts for reliability) ===
 (function() {
   var ctrl = null;
   document.addEventListener('click', function(e) {
     var a = e.target.closest('a'); if (!a) return;
     var href = a.getAttribute('href'); if (!href) return;
+    // Skip: external, anchor, JS, blank target, or POST pages (let full nav handle)
     if (href.startsWith('http') || href.startsWith('#') || href.startsWith('javascript:') || a.target === '_blank') return;
+    if (href.startsWith('/posts/')) return; // full page load for posts
     e.preventDefault();
     if (ctrl) ctrl.abort(); ctrl = new AbortController();
     var right = document.getElementById('mid-right'); if (right) right.style.opacity = '0.7';
