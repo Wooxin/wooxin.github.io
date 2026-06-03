@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('posts', ({ data }) => data.published !== false);
+posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout title="首页">
+  <nav id="textTags" slot="mid-mid">
+    <div id="textTags-nav">
+      <div class="reading-title"><div class="reading-title-text">0%</div></div>
+      <span>文章列表</span>
+    </div>
+  </nav>
+  <div id="recent-posts" slot="mid-mid">
+    {posts.map((post, i) => (
+      <a class={`recent-post-item${i < 3 ? ' new-post' : ''}`} href={`/posts/${post.id.replace(/^.*[\\/]/, '').replace(/\.md$/, '')}/`}>
+        <span class="icon"><i class="icon-main">&#x203A;</i><i class="icon-hover">&#x203A;</i></span>
+        <span class="post-title">{post.data.title}</span>
+        {i < 3 && <span class="new-badge">新</span>}
+        <time class="post-date" datetime={post.data.date.toISOString()}>
+          {post.data.date.getFullYear().toString().slice(2)}/{String(post.data.date.getMonth()+1).padStart(2,'0')}/{String(post.data.date.getDate()).padStart(2,'0')}
+        </time>
+      </a>
+    ))}
+  </div>
+
+  <div id="home">
+    <div id="home-head">
+      <h1>欢迎来到 《书集》 博客</h1>
+      <hr />
+    </div>
+    <div class="scrollable-container" id="home-main">
+      <div id="index-post">
+        <h2>关于本站</h2>
+        <p>这个博客使用 Astro 搭建，分享 Linux 运维实践、网络排错、开发工具配置等技术内容。</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

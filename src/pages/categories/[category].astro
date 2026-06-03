@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  const cats = new Set();
+  posts.forEach(p => (p.data.category || []).forEach(c => cats.add(c)));
+  return Array.from(cats).map(cat => ({ params: { category: cat }, props: { category: cat } }));
+}
+
+const { category } = Astro.props;
+const posts = await getCollection('posts', ({ data }) => (data.category || []).includes(category) && data.published !== false);
+posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout title={`分类: ${category}`}>
+  <div style="padding:1.5rem;">
+    <h1>{category} <span style="font-size:0.8rem;color:var(--text-muted);">({posts.length})</span></h1>
+    <div style="margin-top:1rem;">
+      {posts.map(p => (
+        <a class="tag-post-item" href={`/posts/${p.slug}/`}>{p.data.title}</a>
+      ))}
+    </div>
+    <br />
+    <a href="/categories/" style="color:var(--text-link);">&larr; 返回分类列表</a>
+  </div>
+</BaseLayout>

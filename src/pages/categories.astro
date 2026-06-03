@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('posts', ({ data }) => data.published !== false);
+const catMap = new Map();
+posts.forEach(p => {
+  (p.data.category || []).forEach(c => {
+    if (!catMap.has(c)) catMap.set(c, []);
+    catMap.get(c).push(p);
+  });
+});
+const cats = Array.from(catMap.entries()).sort((a, b) => b[1].length - a[1].length);
+---
+
+<BaseLayout title="分类">
+  <div id="categories" style="overflow-y:auto;padding:1.5rem;max-height:100vh;">
+    <h1>分类</h1>
+    <ul class="category-list" style="list-style:none;padding:0;">
+      {cats.map(([cat, catPosts]) => (
+        <li class="category-list-item" style="padding:0.75rem 1rem;margin:0.25rem 0;border-radius:0.6rem;background:var(--bg-surface);border:var(--border-subtle);box-shadow:var(--shadow-sm);">
+          <a class="category-list-link" href={`/categories/${cat}/`} style="color:var(--text-link);text-decoration:none;font-weight:500;font-size:0.9rem;">{cat}</a>
+          <span style="font-size:0.8rem;color:var(--text-muted);"> ({catPosts.length})</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</BaseLayout>
