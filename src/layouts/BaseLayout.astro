@@ -1,7 +1,4 @@
 ---
-import '../styles/theme-color.css';
-import '../styles/global.css';
-
 interface Props {
   title: string;
   description?: string;
@@ -17,6 +14,7 @@ const siteUrl = 'https://wooxin.github.io';
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/woxhome.css" />
   <title>{pageTitle}</title>
   {description && <meta name="description" content={description} />}
   <meta name="keywords" content="运维,服务器,Linux,网络,Hexo,技术博客" />
