@@ -542,7 +542,7 @@ article#logs {
 }
 
 #post-content p {
-  max-width: 78ch;
+  max-width: none;
 }
 
 #post-content p code,
