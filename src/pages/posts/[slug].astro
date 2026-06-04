@@ -1,36 +1,34 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { getPostSlug } from '../../utils/posts';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts');
-  return posts.map((post) => {
-    const slug = post.id.replace(/^.*[\\/]/, '').replace(/\.md$/, '');
-    return { params: { slug }, props: { post } };
-  });
+  const posts = await getCollection('posts', ({ data }) => data.published !== false);
+  posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  return posts.map((post) => ({
+    params: { slug: getPostSlug(post) },
+    props: { post, posts },
+  }));
 }
 
-const { post } = Astro.props;
+const { post, posts } = Astro.props;
 const cats = post.data.category || [];
 const tags = post.data.tags || [];
-// Render markdown content
-let Content = null;
-let htmlFallback = '';
-try {
-  const rendered = await post.render();
-  Content = rendered.Content;
-} catch(e) {
-  htmlFallback = post.body || '';
-}
-const prevPost = null; // TODO: implement prev/next
-const nextPost = null;
+
+const currentIdx = posts.findIndex((p) => p.id === post.id);
+const prevPost = currentIdx > 0 ? posts[currentIdx - 1] : null;
+const nextPost = currentIdx < posts.length - 1 ? posts[currentIdx + 1] : null;
+
+const { Content, headings } = await post.render();
+const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 4);
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
   <article id="post">
     <div id="post-main">
       <div class="post-header" style="position:relative;">
-        <h1>{post.data.title}</h1>
+        <h1 id="post-title">{post.data.title}</h1>
         <div id="post-toc-inline">
           <div id="toc" class="toc-article">
             <div class="toc-title">
@@ -40,6 +38,15 @@ const nextPost = null;
                 <div class="reading-progress"><div class="reading-progress-text">0%</div></div>
               </div>
             </div>
+            {tocHeadings.length > 0 && (
+              <ol class="toc-list">
+                {tocHeadings.map(h => (
+                  <li class={`toc-item toc-depth-${h.depth}`}>
+                    <a href={`#${h.slug}`}>{h.text}</a>
+                  </li>
+                ))}
+              </ol>
+            )}
           </div>
         </div>
       </div>
@@ -63,7 +70,7 @@ const nextPost = null;
     </div>
     <div class="scrollable-container">
       <div id="post-content">
-        {Content ? <Content /> : <div set:html={htmlFallback}></div>}
+        <Content />
         <hr />
         <div id="post-info">
           <div id="post-info-main">
@@ -75,8 +82,8 @@ const nextPost = null;
         <hr />
         <div id="post-bottom">
           <div id="post-bottom-content">
-            {prevPost && <div id="post-bottom-prev"><a href={`/posts/${prevPost.slug}/`}>下一篇: {prevPost.data.title}</a></div>}
-            {nextPost && <div id="post-bottom-next"><a href={`/posts/${nextPost.slug}/`}>上一篇: {nextPost.data.title}</a></div>}
+            {nextPost && <div id="post-bottom-prev"><a href={`/posts/${getPostSlug(nextPost)}/`}>下一篇: {nextPost.data.title}</a></div>}
+            {prevPost && <div id="post-bottom-next"><a href={`/posts/${getPostSlug(prevPost)}/`}>上一篇: {prevPost.data.title}</a></div>}
           </div>
         </div>
         <hr />
@@ -94,4 +101,5 @@ const nextPost = null;
     "dateModified": (post.data.updated || post.data.date).toISOString().slice(0,10),
     "author": { "@type": "Person", "name": "Wooxin" }
   })} />
+
 </BaseLayout>

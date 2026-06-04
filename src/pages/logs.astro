@@ -3,8 +3,144 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="日志">
-  <div style="padding:1.5rem;">
+  <article id="logs">
     <h1>日志</h1>
-    <p>博客更新日志</p>
-  </div>
+    <p style="color:var(--text-secondary);margin-bottom:1.5rem;">博客更新日志，记录每次改动的细节与思考。</p>
+
+    <h2>26/06/04 — Astro 迁移收尾</h2>
+    <ol>
+      <li>从 Hexo 完整迁移至 Astro，17 篇文章全部适配 Markdown 渲染</li>
+      <li>修复侧边栏文章列表（#mid-mid）在非首页刷新后消失的问题——CSS 百分比高度链断裂，改用 slot fallback 统一渲染</li>
+      <li>首页「关于本站」内容扩容，新增主题主旨、建站动机、分享方向三个板块</li>
+      <li>页面切换加入 fade-in + slide-up 动画，取代之前生硬的瞬间刷新</li>
+      <li>Shiki 双主题代码高亮正式跑通，明暗模式自动跟随</li>
+      <li>日志页面从旧版迁移，追加新条目</li>
+    </ol>
+
+    <h2>26/06/03 — Astro 迁移启动</h2>
+    <ol>
+      <li>基于 Astro 5 + woxtheme-3ZD 样式重建博客骨架</li>
+      <li>迁移 <code>woxhome.css</code> 主题变量，明暗双主题无缝继承</li>
+      <li>重写全部页面模板：首页、文章页、归档、分类、标签、日志</li>
+      <li>SPA 导航机制从旧版 Pjax 迁移到 fetch + DOM swap，实测跳转更快</li>
+      <li>搜索、主题切换、i18n、移动端列表切换、右键菜单等 JS 模块全部适配</li>
+      <li>字数统计与阅读时间估算同步恢复</li>
+    </ol>
+
+    <hr />
+
+    <h2>26/06/03 — 原 Hexo 最后一次更新</h2>
+    <ol>
+      <li>重新优化了 Pjax，现在全部页面都不会乱刷新了</li>
+      <li>重新优化了搜索，现在搜索应该可以刷新更快了</li>
+      <li>能懒加载的都懒加载，之前的一些 BUG 也修复了</li>
+      <li>黑白主题现在加了一个过渡动画，现在切换应该丝滑一些</li>
+    </ol>
+
+    <h2>25/09/19</h2>
+    <ol>
+      <li>优化了计算字数与时间的 JS，用更简单的方式</li>
+      <li>配置了部分 JS 的懒加载</li>
+      <li>通过 Pjax 进行了一定的优化，读者体验流畅了，但是性能测试没区别</li>
+    </ol>
+
+    <h2>25/09/18</h2>
+    <ol>
+      <li>配置了全局 Pjax</li>
+      <li>写了个计算字数与计算阅读时间，很简单的代码</li>
+    </ol>
+
+    <h2>25/09/17</h2>
+    <ol>
+      <li>将 TOC 设置为可切换功能，有朋友反馈 TOC 并非必要</li>
+    </ol>
+
+    <h2>25/09/16</h2>
+    <ol>
+      <li>将 TOC 移动到文章部分，以免遮挡中间的文章标题，提升阅读体验</li>
+      <li>将老旧的 JS 代码进行了更新，不过新方法一点儿提升都没</li>
+    </ol>
+
+    <h2>25/09/16 — 同日第二次更新</h2>
+    <ol>
+      <li>实现了更流畅的右键菜单，优化精简代码，通过变量替代重复操作，这反而使得性能提升了</li>
+      <li>实现了简单的随机跳转</li>
+      <li>在文章页面添加了滚动条以使得读者可以定位</li>
+      <li>在文章页面时，顶部也有可见的阅读进度条效果</li>
+      <li>TOC 与阅读进度同步，翻到对应标题后 TOC 会高亮显示</li>
+      <li>增加了评论系统（最简单的 Giscus）</li>
+    </ol>
+
+    <hr />
+
+    <h2>25/09/15</h2>
+    <ol>
+      <li>对右键菜单进行了更多的优化，不确定有没有必要，但是总要好过纯键盘的体验，我的 Vim 操作计划暂时搁浅了</li>
+      <li>对 Pjax 进行了针对性优化</li>
+      <li>对图片的逻辑进行了针对性优化</li>
+      <li>对日志页面进行了针对性优化，不过又撤销了，因为那会导致对读者电脑性能造成巨大影响，所以我会定期手动将之前的更新删除</li>
+    </ol>
+
+    <hr />
+
+    <h2>25/09/12</h2>
+    <ol>
+      <li>修复了搜索功能</li>
+      <li>修复了 Shift 菜单</li>
+      <li>做了一个简单的右键菜单</li>
+      <li>大幅度修改和精简了代码，测试发现响应速度增加了 121ms，不算太大，不过可以再接再厉</li>
+    </ol>
+
+    <hr />
+
+    <h2>24/10/23 — 博客诞生</h2>
+    <ol>
+      <li>通过 Pug + Stylus + TypeScript 搭建博客</li>
+      <li>添加了搜索功能</li>
+      <li>添加了评论系统（后来因性能问题暂时关闭，现改用 Giscus）</li>
+      <li>将边角全都设置为圆角，看着舒服多了</li>
+    </ol>
+  </article>
 </BaseLayout>
+
+<style>
+  article#logs h2::before,
+  article#logs h3::before,
+  article#logs h4::before,
+  article#logs h5::before,
+  article#logs h6::before {
+    content: none !important;
+  }
+  article#logs h2 {
+    font-size: 1.2rem;
+    margin-top: 0.6rem;
+    margin-bottom: 0.45rem;
+    color: var(--text-primary);
+  }
+  article#logs h2:first-of-type {
+    margin-top: 0;
+  }
+  article#logs ol {
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+    list-style: none;
+  }
+  article#logs ol li {
+    margin-bottom: 0.3rem;
+    line-height: 1.65;
+    position: relative;
+    padding-left: 1.4rem;
+  }
+  article#logs ol li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+  article#logs hr {
+    margin: 1.2rem 0;
+    border-color: var(--border-hr);
+  }
+</style>

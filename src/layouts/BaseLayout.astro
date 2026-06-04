@@ -1,4 +1,10 @@
 ---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import { getPostUrl } from '../utils/posts';
+import logoImg from '../assets/logo.png';
+import avatarImg from '../assets/avatar.jpg';
+
 interface Props {
   title: string;
   description?: string;
@@ -6,7 +12,10 @@ interface Props {
 
 const { title, description } = Astro.props;
 const pageTitle = `${title} [ 《书集》 ]`;
-const siteUrl = 'https://wooxin.github.io';
+const siteUrl = Astro.site?.href?.replace(/\/$/, '') || 'https://wooxin.github.io';
+
+const allPosts = await getCollection('posts', ({ data }) => data.published !== false);
+allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 
 <!DOCTYPE html>
@@ -15,25 +24,28 @@ const siteUrl = 'https://wooxin.github.io';
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/woxhome.css" />
+  <link rel="stylesheet" href="/astro-modern.css" />
   <title>{pageTitle}</title>
   {description && <meta name="description" content={description} />}
   <meta name="keywords" content="运维,服务器,Linux,网络,Hexo,技术博客" />
   <meta name="author" content="Wooxin" />
   <meta property="og:title" content={pageTitle} />
   <meta property="og:type" content="article" />
-  <meta property="og:url" content={siteUrl + '/' + (Astro.url.pathname || '')} />
+  <meta property="og:url" content={new URL(Astro.url.pathname, siteUrl).href} />
   <meta property="og:site_name" content="书集" />
   {description && <meta property="og:description" content={description} />}
-  <link rel="canonical" href={siteUrl + '/' + Astro.url.pathname} />
+  <link rel="canonical" href={new URL(Astro.url.pathname, siteUrl).href} />
   <link rel="alternate" type="application/rss+xml" title="书集" href="/rss.xml" />
   <link rel="icon" href="/img/favicon.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css" />
 </head>
 <body>
-  <script>
+  <script is:inline>
     (function() {
-      var t = localStorage.getItem('theme') || 'light';
+      var t = localStorage.getItem('theme');
+      if (t !== 'dark' && t !== 'light') t = 'light';
       document.documentElement.setAttribute('data-theme', t);
+      document.documentElement.style.colorScheme = t;
     })();
     window.__searchPath = '/search.xml';
   </script>
@@ -44,7 +56,7 @@ const siteUrl = 'https://wooxin.github.io';
         <div id="top-left">
           <nav id="top-left-option">
             <div id="logo">
-              <a href="/"><img src="/img/logo.png" alt="Logo" /></a>
+              <a href="/"><Image src={logoImg} alt="Logo" width={28} height={28} /></a>
             </div>
             <div id="fps" title="FPS">FPS: --</div>
           </nav>
@@ -53,44 +65,34 @@ const siteUrl = 'https://wooxin.github.io';
       <div id="top-col-mid">
         <div id="top-mid">
           <nav id="top-mid-option">
-            <a class="nav-link" href="/"><span class="label home">首页</span><span class="nav-icon">&#x2302;</span></a>
-            <a class="nav-link" href="/archives"><span class="label archives">归档</span><span class="nav-icon">&#x1F4C1;</span></a>
-            <a class="nav-link" href="/categories"><span class="label categories">分类</span><span class="nav-icon">&#x1F4CB;</span></a>
-            <a class="nav-link" href="/tags"><span class="label tags">标签</span><span class="nav-icon">&#x1F3F7;</span></a>
-            <a class="nav-link" href="/logs"><span class="label logs">日志</span><span class="nav-icon">&#x1F4DD;</span></a>
+            <a class="nav-link" href="/"><span class="label home">首页</span><span class="nav-icon">H</span></a>
+            <a class="nav-link" href="/archives/"><span class="label archives">归档</span><span class="nav-icon">A</span></a>
+            <a class="nav-link" href="/categories/"><span class="label categories">分类</span><span class="nav-icon">C</span></a>
+            <a class="nav-link" href="/tags/"><span class="label tags">标签</span><span class="nav-icon">T</span></a>
+            <a class="nav-link" href="/logs/"><span class="label logs">日志</span><span class="nav-icon">L</span></a>
           </nav>
         </div>
       </div>
       <div id="top-col-right">
         <div id="top-right">
           <nav id="top-right-option">
-            <div id="top-search">
-              <div class="search-icon" title="搜索">
-                <i class="search-main">&#x2315;</i>
-                <i class="search-up">&#x2315;</i>
-                <div id="search-popup" style="display:none">
-                  <div id="search-panel">
-                    <input id="local-search-input" type="text" name="q" placeholder="搜索..." />
-                    <div id="local-search-results"></div>
-                  </div>
-                </div>
-              </div>
+            <div id="top-search" title="搜索">
+              <svg class="nav-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
             </div>
-            <div id="language-i18n">
-              <div id="i18n-current" title="切换语言">CN</div>
-              <div id="i18n-dropdown" style="display:none"></div>
+            <div id="language-i18n" title="切换语言">
+              <svg class="nav-icon-svg" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <span class="i18n-label">🇨🇳 CN</span>
             </div>
             <div id="Browsing-Progress">
               <div class="progress-toggle" title="返回顶部">
-                <i class="Browsing-main">&#x2191;</i>
-                <i class="Browsing-up">&#x2191;</i>
+                <svg class="nav-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
                 <span id="progress-pct">0%</span>
               </div>
             </div>
             <div id="ColorMode">
               <div class="colormode-toggle" title="切换主题">
-                <i class="ColorMode-main">&#x25D0;</i>
-                <i class="ColorMode-up">&#x25CF;</i>
+                <svg class="nav-icon-svg light-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                <svg class="nav-icon-svg dark-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
               </div>
             </div>
           </nav>
@@ -103,16 +105,16 @@ const siteUrl = 'https://wooxin.github.io';
     <div id="mid-main">
       <div id="mid-left">
         <div id="menu-avatar">
-          <img src="/img/avatar.jpg" alt="User Avatar" />
+          <Image src={avatarImg} alt="User Avatar" width={80} height={80} />
         </div>
         <div id="menu-name"><span>Wooxin</span></div>
         <hr />
         <div id="layout-mid-left-card">
-          <a class="mid-left-card-link" href="https://github.com" target="_blank" rel="noopener" title="GitHub"><span class="card-icon">&#x2B24;</span><span class="card-text">GitHub</span></a>
-          <a class="mid-left-card-link" href="https://space.bilibili.com" target="_blank" rel="noopener" title="BiliBili"><span class="card-icon">&#x25B6;</span><span class="card-text">BiliBili</span></a>
-          <a class="mid-left-card-link" href="https://youtube.com" target="_blank" rel="noopener" title="YouTube"><span class="card-icon">&#x25B6;</span><span class="card-text">YouTube</span></a>
-          <a class="mid-left-card-link" href="https://weibo.com" target="_blank" rel="noopener" title="Weibo"><span class="card-icon">&#x2665;</span><span class="card-text">Weibo</span></a>
-          <a class="mid-left-card-link" href="https://twitter.com" target="_blank" rel="noopener" title="Twitter"><span class="card-icon">&#x2668;</span><span class="card-text">Twitter</span></a>
+          <a class="mid-left-card-link" href="https://github.com" target="_blank" rel="noopener" title="GitHub"><span class="card-icon">G</span><span class="card-text">GitHub</span></a>
+          <a class="mid-left-card-link" href="https://space.bilibili.com" target="_blank" rel="noopener" title="BiliBili"><span class="card-icon">B</span><span class="card-text">BiliBili</span></a>
+          <a class="mid-left-card-link" href="https://youtube.com" target="_blank" rel="noopener" title="YouTube"><span class="card-icon">Y</span><span class="card-text">YouTube</span></a>
+          <a class="mid-left-card-link" href="https://weibo.com" target="_blank" rel="noopener" title="Weibo"><span class="card-icon">W</span><span class="card-text">Weibo</span></a>
+          <a class="mid-left-card-link" href="https://twitter.com" target="_blank" rel="noopener" title="Twitter"><span class="card-icon">X</span><span class="card-text">Twitter</span></a>
         </div>
         <hr />
         <div id="layout-mid-left-links">
@@ -121,7 +123,30 @@ const siteUrl = 'https://wooxin.github.io';
         </div>
       </div>
       <div id="mid-mid">
-        <slot name="mid-mid" />
+        <slot name="mid-mid">
+          <nav id="textTags">
+            <div id="textTags-nav">
+              <div class="reading-title"><div class="reading-title-text">0%</div></div>
+              <span>文章列表 ({allPosts.length})</span>
+            </div>
+          </nav>
+          <div id="recent-posts">
+            {allPosts.map((post, i) => (
+              <a
+                class={`recent-post-item${i < 3 ? ' new-post' : ''}`}
+                href={getPostUrl(post)}
+                style={`content-visibility:auto;contain-intrinsic-size:auto 2.8rem;`}
+              >
+                <span class="icon"><i class="icon-main">&#x203A;</i><i class="icon-hover">&#x203A;</i></span>
+                <span class="post-title">{post.data.title}</span>
+                {i < 3 && <span class="new-badge">新</span>}
+                <time class="post-date" datetime={post.data.date.toISOString()}>
+                  {post.data.date.getFullYear().toString().slice(2)}/{String(post.data.date.getMonth()+1).padStart(2,'0')}/{String(post.data.date.getDate()).padStart(2,'0')}
+                </time>
+              </a>
+            ))}
+          </div>
+        </slot>
       </div>
       <div id="mid-right">
         <slot />
@@ -132,10 +157,11 @@ const siteUrl = 'https://wooxin.github.io';
   <div id="layout-bottom">
     <div id="bottom-main">
       <div id="bottom-option">
-        <span>博客主题作者</span>
+        <span>博客作者</span>
         <span> Wooxin </span>
         <span>使用</span>
-        <a href="http://hexo.io"><span>Hexo</span></a>
+        <a href="https://astro.build"><span>Astro</span></a>
+        <span>构建</span>
         <span>.</span>
         <a href="/">首页</a>
       </div>
@@ -179,6 +205,23 @@ const siteUrl = 'https://wooxin.github.io';
     </div>
   </div>
 
-  <script src="/scripts/bundle.js"></script>
+  <div id="i18n-dropdown" style="display:none"></div>
+
+  <div id="search-overlay" style="display:none">
+    <div id="search-overlay-panel">
+      <div id="search-overlay-header">
+        <span>搜索</span>
+        <button id="search-close-btn">&times;</button>
+      </div>
+      <input id="local-search-input" type="text" name="q" placeholder="搜索文章..." autocomplete="off" />
+      <div id="local-search-results"></div>
+    </div>
+  </div>
+
+  <div id="mobile-list-toggle" title="文章列表">
+    <span>&#x2630;</span>
+  </div>
+
+  <script is:inline src="/scripts/bundle.js"></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { getPostUrl } from '../../utils/posts';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
@@ -19,7 +20,7 @@ posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
     <h1>{tag} <span style="font-size:0.8rem;color:var(--text-muted);">({posts.length})</span></h1>
     <div id="tag-posts-list" style="margin-top:1rem;">
       {posts.map(p => (
-        <a class="tag-post-item" href={`/posts/${p.slug}/`}>{p.data.title}</a>
+        <a class="tag-post-item" href={getPostUrl(p)}>{p.data.title}</a>
       ))}
     </div>
     <br />

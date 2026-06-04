@@ -1,31 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
-
-const posts = await getCollection('posts', ({ data }) => data.published !== false);
-posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 
 <BaseLayout title="首页">
-  <nav id="textTags" slot="mid-mid">
-    <div id="textTags-nav">
-      <div class="reading-title"><div class="reading-title-text">0%</div></div>
-      <span>文章列表</span>
-    </div>
-  </nav>
-  <div id="recent-posts" slot="mid-mid">
-    {posts.map((post, i) => (
-      <a class={`recent-post-item${i < 3 ? ' new-post' : ''}`} href={`/posts/${post.id.replace(/^.*[\\/]/, '').replace(/\.md$/, '')}/`}>
-        <span class="icon"><i class="icon-main">&#x203A;</i><i class="icon-hover">&#x203A;</i></span>
-        <span class="post-title">{post.data.title}</span>
-        {i < 3 && <span class="new-badge">新</span>}
-        <time class="post-date" datetime={post.data.date.toISOString()}>
-          {post.data.date.getFullYear().toString().slice(2)}/{String(post.data.date.getMonth()+1).padStart(2,'0')}/{String(post.data.date.getDate()).padStart(2,'0')}
-        </time>
-      </a>
-    ))}
-  </div>
-
   <div id="home">
     <div id="home-head">
       <h1>欢迎来到 《书集》 博客</h1>
@@ -34,7 +11,40 @@ posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
     <div class="scrollable-container" id="home-main">
       <div id="index-post">
         <h2>关于本站</h2>
-        <p>这个博客使用 Astro 搭建，分享 Linux 运维实践、网络排错、开发工具配置等技术内容。</p>
+
+        <h3>这个主题的主旨</h3>
+        <p>
+          浏览他人博客时，频繁滚动鼠标滚轮总让我感到烦躁——内容散落在页面的各个角落，阅读一篇文章往往需要反复上下翻飞。
+          于是我开始思考：能不能做一个高度集成化的博客？除了查找文章和阅读正文，其余操作一律不需要滚轮。
+        </p>
+        <p>
+          这个博客追求的是克制。没有花里胡哨的动效，没有弹窗、广告和多余的视觉噪音。一切设计只为了一件事——让你在读文章的时候精神高度集中，不被任何无关元素打扰。
+        </p>
+        <p>
+          未来，我还打算逐步复刻 Vim 的操作方式来彻底摆脱鼠标。那将是一个庞大的工程，但值得去做。想象一下：<code>j</code> <code>k</code> 滚动文章、<code>f</code> 快速跳转链接、<code>/</code> 全文搜索——全都发生在键盘上。这很难，但方向是对的。
+        </p>
+
+        <h3>为什么创造这个博客？</h3>
+        <p>
+          这个博客是我利用闲暇时间从零搭建的。起因其实很实际：之前我一直用 Obsidian 当笔记软件，体验很好，但后来分享需求越来越频繁。把 Markdown 文件直接发给别人，对方往往会看到一堆 <code>#</code> 和 <code>**</code> 标记，乱码不说，有些人甚至不知道 Markdown 是什么。
+        </p>
+        <p>
+          我需要一个地方把笔记「编译」成普通人也能流畅阅读的网页。于是就有了《书集》。
+        </p>
+
+        <h3>博客主要分享什么？</h3>
+        <p>
+          我本人是 IDC 运维 / 网络运维 / 服务器运维，Node.js 其实不太熟，这个博客本身也是边学边做的产物，所以它会随着我的技术水平一起迭代成长。
+        </p>
+        <p>
+          内容方面，主要分享运维工作中的疑难杂症，以及某个灵光一闪之后亲手实现的小技巧、小妙招（删库跑路不在讨论范围内）。之前写了不少自动化脚本，全靠在微信上传来传去。直到有一次重装电脑，脚本备份丢了不说，想找回旧文件时才发现——微信分享早就过期了。只好从头再写一遍。从那以后，所有值得留的东西都放在这里。
+        </p>
+        <p>
+          偶尔也会分享一些 Java / C / Rust 的代码，但更新频率肯定不如运维文章，毕竟本职工作在那儿摆着。
+        </p>
+        <p>
+          写代码之外，我是个大写的乐子人。会把平时玩游戏遇到的有趣的事、有趣的人写下来。喜欢把自己热爱的、碰到的有意思的事情分享出来——博大家一乐，也博自己一乐。
+        </p>
       </div>
     </div>
   </div>

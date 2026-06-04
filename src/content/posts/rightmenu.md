@@ -2,7 +2,11 @@
 title: rightmenu
 date: 2025-09-19
 category:
+  - 博客
+  - 教程
 tags:
+  - js
+  - 右键菜单
 ---
 ```js
 window.WordCountUtils = {
