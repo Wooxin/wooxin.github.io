@@ -5,9 +5,7 @@ import { getPostSlug, getEffectiveDate, getFileMtime } from '../../utils/posts';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => data.published !== false);
-  posts.sort((a, b) => {
-    return getEffectiveDate(b).getTime() - getEffectiveDate(a).getTime();
-  });
+  posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
   return posts.map((post) => ({
     params: { slug: getPostSlug(post) },
     props: { post, posts },
@@ -27,7 +25,7 @@ const now = new Date();
 const effDate = getEffectiveDate(post);
 const fileMtime = getFileMtime(post);
 const updateDate = post.data.updated || (fileMtime && fileMtime > post.data.date ? fileMtime : post.data.date);
-const ageMs = now.getTime() - effDate.getTime();
+const ageMs = now.getTime() - post.data.date.getTime();
 const staleLevel = ageMs > 365 * 24 * 60 * 60 * 1000 ? 'red' : ageMs > 90 * 24 * 60 * 60 * 1000 ? 'yellow' : null;
 const hasUpdate = updateDate.getTime() !== post.data.date.getTime();
 
@@ -66,19 +64,19 @@ const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 4);
         </div>
       </div>
       <div id="post-date" class="d-flex flex-row" style="display:flex;flex-wrap:wrap;align-items:center;gap:0.3rem;margin-bottom:0.4rem;">
-        <span class="post-meta-label">创建:</span>
+        <span class="post-meta-label" data-i18n="post.created">创建:</span>
         <span class="post-meta-value">{post.data.date.toISOString().replace('T', ' ').slice(0,19)}</span>
-        <span class="post-meta-label">更新:</span>
+        <span class="post-meta-label" data-i18n="post.updated">更新:</span>
         <span class="post-meta-value">{updateDate.toISOString().replace('T', ' ').slice(0,19)}</span>
-        <span class="post-meta-label">字数:</span>
-        <span id="post-count-body"><span class="post-meta-value"><a href="javascript:initWordCountOnly()">0</a> <span>字</span></span></span>
-        <span class="post-meta-label">耗时:</span>
-        <span id="post-time-body"><span class="post-meta-value"><a href="javascript:initReadingTimeOnly()">0</a> <span>分钟</span></span></span>
+        <span class="post-meta-label" data-i18n="post.words">字数:</span>
+        <span id="post-count-body"><span class="post-meta-value"><a href="javascript:initWordCountOnly()">0</a> <span data-i18n="post.char_unit">字</span></span></span>
+        <span class="post-meta-label" data-i18n="post.time">耗时:</span>
+        <span id="post-time-body"><span class="post-meta-value"><a href="javascript:initReadingTimeOnly()">0</a> <span data-i18n="post.min_unit">分钟</span></span></span>
       </div>
       <div id="post-cate-tag" class="d-flex flex-row" style="display:flex;flex-wrap:wrap;align-items:center;gap:0.3rem;margin-bottom:0.4rem;">
-        <span class="post-meta-label">分类:</span>
+        <span class="post-meta-label" data-i18n="post.category">分类:</span>
         <span class="post-meta-value">{cats.join(', ')}</span>
-        <span class="post-meta-label">标签:</span>
+        <span class="post-meta-label" data-i18n="post.tags">标签:</span>
         <span class="post-meta-value">{tags.join(', ')}</span>
       </div>
       {staleLevel && (
@@ -97,7 +95,7 @@ const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 4);
           const summary = summaries?.[fileName];
           return summary ? (
             <blockquote class="ai-summary">
-              <span class="ai-summary-label">AI 摘要</span>
+              <span class="ai-summary-label" data-i18n="post.ai_summary">AI 摘要</span>
               {summary}
             </blockquote>
           ) : null;
@@ -106,9 +104,9 @@ const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 4);
         <hr />
         <div id="post-info">
           <div id="post-info-main">
-            <div id="post-author"><span>文章作者: </span><p class="author-names">Wooxin</p></div>
-            <div id="post-links"><span>文章链接: </span><p>{Astro.url.href}</p></div>
-            <div id="post-copyright"><span>版权声明: </span><p class="copyright-names">CC BY-NC-SA 4.0</p></div>
+            <div id="post-author"><span data-i18n="post.author">文章作者: </span><p class="author-names">Wooxin</p></div>
+            <div id="post-links"><span data-i18n="post.link">文章链接: </span><p>{Astro.url.href}</p></div>
+            <div id="post-copyright"><span data-i18n="post.copyright">版权声明: </span><p class="copyright-names">CC BY-NC-SA 4.0</p></div>
           </div>
         </div>
         <hr />

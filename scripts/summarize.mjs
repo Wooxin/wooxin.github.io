@@ -28,8 +28,9 @@ const GEMINI_KEY = process.env.GEMINI_API_KEY;
 const PROVIDER = VOLC_KEY ? 'volcengine' : GEMINI_KEY ? 'gemini' : null;
 
 if (!PROVIDER) {
-  console.error('请在 .env 中设置 VOLCENGINE_API_KEY 或 GEMINI_API_KEY');
-  process.exit(1);
+  console.log('未设置 API Key，跳过 AI 摘要生成。');
+  console.log('本地开发请在 .env 中设置 VOLCENGINE_API_KEY');
+  process.exit(0);
 }
 
 console.log(`API: ${PROVIDER}\n`);

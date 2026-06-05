@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev --port 4000",
     "start": "astro dev --port 4000",
+    "prebuild": "node scripts/summarize.mjs",
     "build": "astro build",
     "preview": "astro preview"
   },

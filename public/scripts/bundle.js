@@ -5,24 +5,104 @@
       search: '搜索...',
       theme: '主题',
       language: '简体中文',
+      'post.created': '创建:',
+      'post.updated': '更新:',
+      'post.words': '字数:',
+      'post.time': '耗时:',
+      'post.category': '分类:',
+      'post.tags': '标签:',
+      'post.author': '文章作者:',
+      'post.link': '文章链接:',
+      'post.copyright': '版权声明:',
+      'post.toc': '目录',
+      'post.prev': '上一篇:',
+      'post.next': '下一篇:',
+      'post.ai_summary': 'AI 摘要',
+      'post.char_unit': '字',
+      'post.min_unit': '分钟',
+      'article_list': '文章列表',
+      new_badge: '新',
+      tools: '工具',
+      logs: '日志',
+      friends: '友情链接',
     },
     en: {
       nav: ['Home', 'Archives', 'Categories', 'Tags', 'Logs'],
       search: 'Search...',
       theme: 'Theme',
       language: 'English',
+      'post.created': 'Created:',
+      'post.updated': 'Updated:',
+      'post.words': 'Words:',
+      'post.time': 'Reading:',
+      'post.category': 'Category:',
+      'post.tags': 'Tags:',
+      'post.author': 'Author:',
+      'post.link': 'Link:',
+      'post.copyright': 'License:',
+      'post.toc': 'Contents',
+      'post.prev': 'Prev:',
+      'post.next': 'Next:',
+      'post.ai_summary': 'AI Summary',
+      'post.char_unit': 'chars',
+      'post.min_unit': 'min',
+      'article_list': 'Articles',
+      new_badge: 'New',
+      tools: 'Tools',
+      logs: 'Logs',
+      friends: 'Friends',
     },
     ja: {
       nav: ['ホーム', 'アーカイブ', 'カテゴリ', 'タグ', 'ログ'],
       search: '検索...',
       theme: 'テーマ',
       language: '日本語',
+      'post.created': '作成:',
+      'post.updated': '更新:',
+      'post.words': '文字数:',
+      'post.time': '読了:',
+      'post.category': 'カテゴリ:',
+      'post.tags': 'タグ:',
+      'post.author': '著者:',
+      'post.link': 'リンク:',
+      'post.copyright': 'ライセンス:',
+      'post.toc': '目次',
+      'post.prev': '前へ:',
+      'post.next': '次へ:',
+      'post.ai_summary': 'AI 要約',
+      'post.char_unit': '字',
+      'post.min_unit': '分',
+      'article_list': '記事一覧',
+      new_badge: '新',
+      tools: 'ツール',
+      logs: 'ログ',
+      friends: '友達',
     },
     ko: {
       nav: ['홈', '아카이브', '카테고리', '태그', '로그'],
       search: '검색...',
       theme: '테마',
       language: '한국어',
+      'post.created': '작성:',
+      'post.updated': '수정:',
+      'post.words': '글자수:',
+      'post.time': '읽기:',
+      'post.category': '분류:',
+      'post.tags': '태그:',
+      'post.author': '저자:',
+      'post.link': '링크:',
+      'post.copyright': '라이선스:',
+      'post.toc': '목차',
+      'post.prev': '이전:',
+      'post.next': '다음:',
+      'post.ai_summary': 'AI 요약',
+      'post.char_unit': '자',
+      'post.min_unit': '분',
+      'article_list': '글 목록',
+      new_badge: '새글',
+      tools: '도구',
+      logs: '로그',
+      friends: '친구',
     },
   };
 
@@ -170,9 +250,24 @@
   function applyLanguage(lang) {
     const currentLang = translations[lang] ? lang : 'zh-CN';
     const dict = translations[currentLang];
+
+    // 导航栏标签
     document.querySelectorAll('#top-mid-option .nav-link .label').forEach((label, index) => {
       if (dict.nav[index]) label.textContent = dict.nav[index];
     });
+
+    // data-i18n 属性元素
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+      var key = el.getAttribute('data-i18n');
+      if (dict[key]) el.textContent = dict[key];
+    });
+
+    // data-i18n-placeholder
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+      var key = el.getAttribute('data-i18n-placeholder');
+      if (dict[key]) el.placeholder = dict[key];
+    });
+
     const input = document.getElementById('local-search-input');
     if (input) input.placeholder = dict.search;
     var label = document.querySelector('#language-i18n .i18n-label');
@@ -531,6 +626,8 @@
     decorateCodeBlocks();
     initToc();
     initGiscus();
+    // SPA 导航后重新应用语言
+    applyLanguage(safeStorageGet('lang', 'zh-CN'));
   }
 
   var KNOWN_PREFIXES = ['/posts/', '/archives/', '/categories/', '/tags/', '/logs/', '/search.xml', '/rss.xml'];
@@ -565,12 +662,26 @@
     currentRight.innerHTML = nextRight.innerHTML;
     currentRight.scrollTop = 0;
 
+    // 保存滚动位置（mid-mid 本身的 scroll 或内部 recent-posts 的 scroll）
+    var rp = currentMid ? currentMid.querySelector('#recent-posts') : null;
+    var scrollEl = rp && rp.scrollHeight > rp.clientHeight ? rp : currentMid;
+    var midScroll = scrollEl ? scrollEl.scrollTop : 0;
+
     const nextHasList = nextMid && nextMid.querySelector('#recent-posts');
     const currentHasList = currentMid && currentMid.querySelector('#recent-posts');
     if (nextHasList && currentMid) {
       currentMid.innerHTML = nextMid.innerHTML;
     } else if (!currentHasList && nextMid && nextMid.textContent.trim()) {
       currentMid.innerHTML = nextMid.innerHTML;
+    }
+
+    // 恢复滚动位置（等 DOM 渲染完）
+    if (currentMid) {
+      requestAnimationFrame(function() {
+        var newRp = currentMid.querySelector('#recent-posts');
+        var target = newRp && newRp.scrollHeight > newRp.clientHeight ? newRp : currentMid;
+        target.scrollTop = midScroll;
+      });
     }
 
     history.pushState({}, '', href);

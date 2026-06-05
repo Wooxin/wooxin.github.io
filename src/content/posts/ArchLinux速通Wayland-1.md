@@ -1,6 +1,6 @@
 ---
 title: ArchLinux速通Wayland - 第一章
-date: 2025-09-14 00:00:00
+date: 2025-09-14 16:00:54
 category:
     - Linux
     - ArchLinux

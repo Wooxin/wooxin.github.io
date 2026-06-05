@@ -20,16 +20,14 @@ const THREE_MONTHS = 1000 * 60 * 60 * 24 * 90;
 const ONE_YEAR = 1000 * 60 * 60 * 24 * 365;
 
 function getStaleness(post) {
-  const age = now.getTime() - getEffectiveDate(post).getTime();
+  const age = now.getTime() - post.data.date.getTime();
   if (age > ONE_YEAR) return 'red';
   if (age > THREE_MONTHS) return 'yellow';
   return null;
 }
 
 const allPosts = await getCollection('posts', ({ data }) => data.published !== false);
-allPosts.sort((a, b) => {
-  return getEffectiveDate(b).getTime() - getEffectiveDate(a).getTime();
-});
+allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 
 <!DOCTYPE html>
@@ -83,9 +81,9 @@ allPosts.sort((a, b) => {
             <a class="nav-link" href="/archives/"><span class="label archives">归档</span><span class="nav-icon">A</span></a>
             <a class="nav-link" href="/categories/"><span class="label categories">分类</span><span class="nav-icon">C</span></a>
             <a class="nav-link" href="/tags/"><span class="label tags">标签</span><span class="nav-icon">T</span></a>
-            <a class="nav-link" href="/logs/"><span class="label logs">日志</span><span class="nav-icon">L</span></a>
+            <a class="nav-link" href="/logs/"><span class="label logs" data-i18n="logs">日志</span><span class="nav-icon">L</span></a>
             <span class="nav-link nav-dropdown" tabindex="0">
-              <span class="label tools">工具</span><span class="nav-icon">U</span>
+              <span class="label tools" data-i18n="tools">工具</span><span class="nav-icon">U</span>
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="/tools/#calculator">计算器</a>
                 <a class="dropdown-item" href="/tools/#timestamp">时间戳转换</a>
@@ -144,7 +142,7 @@ allPosts.sort((a, b) => {
         </div>
         <hr />
         <div id="layout-mid-left-links">
-          <span class="friends-title">友情链接</span>
+          <span class="friends-title" data-i18n="friends">友情链接</span>
           <a class="friend-link" href="https://longwudf.github.io/shiyuboke/" target="_blank" rel="noopener">时雨博客</a>
         </div>
       </div>
@@ -153,14 +151,14 @@ allPosts.sort((a, b) => {
           <nav id="textTags">
             <div id="textTags-nav">
               <div class="reading-title"><div class="reading-title-text">0%</div></div>
-              <span>文章列表 ({allPosts.length})</span>
+              <span data-i18n="article_list">文章列表</span><span> ({allPosts.length})</span>
             </div>
           </nav>
           <div id="recent-posts">
             {allPosts.map((post, i) => {
               const stale = getStaleness(post);
               const effDate = getEffectiveDate(post);
-              const hasUpdate = effDate.getTime() !== post.data.date.getTime();
+              const hasUpdate = !!(post.data.updated && post.data.updated.getTime() !== post.data.date.getTime());
               return (
               <a
                 class={`recent-post-item${i < 3 ? ' new-post' : ''}`}

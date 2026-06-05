@@ -12,11 +12,7 @@ export async function getStaticPaths() {
 
 const { category } = Astro.props;
 const posts = await getCollection('posts', ({ data }) => (data.category || []).includes(category) && data.published !== false);
-posts.sort((a, b) => {
-  const aDate = (a.data.updated || a.data.date).getTime();
-  const bDate = (b.data.updated || b.data.date).getTime();
-  return bDate - aDate;
-});
+posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 
 <BaseLayout title={`分类: ${category}`}>

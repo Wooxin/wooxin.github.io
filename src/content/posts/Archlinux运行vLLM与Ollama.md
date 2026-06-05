@@ -17,6 +17,8 @@ tags:
 
 > vLLM 跑推理，Ollama 玩模型。一台 Arch 单机搞定所有。
 
+> 别想着AiAgent配合了, 想要真正实现那种效果最低需要70B模型, 推荐132B。
+
 ## 硬件前提
 
 - NVIDIA 显卡（我用的 4070 Laptop 8GB）

@@ -1,6 +1,6 @@
 ---
 title: 'SXPSL: 在Centos7上部署秘密实验室教程'
-date: 2024-11-04 00:00:00
+date: 2024-11-04 15:11:55
 category: 
     - Centos
     - Game

@@ -1,6 +1,6 @@
 ---
 title: NVM完美配置教程
-date: 2024-11-04 00:00:00
+date: 2024-11-04 15:09:50
 category: 
     - Node
     - NVM
