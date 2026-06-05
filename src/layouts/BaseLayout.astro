@@ -172,6 +172,7 @@ allPosts.sort((a, b) => {
               >
                 <span class="icon"><i class="icon-main">&#x203A;</i><i class="icon-hover">&#x203A;</i></span>
                 <span class="post-title">{post.data.title}</span>
+                {i < 3 && <span class="new-badge">新</span>}
                 {stale === 'red' && <span class="stale-badge stale-red" title="内容可能过时">!</span>}
                 {stale === 'yellow' && <span class="stale-badge stale-yellow" title="内容较旧">!</span>}
                 {hasUpdate && (
