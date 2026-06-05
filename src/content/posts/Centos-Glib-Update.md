@@ -1,6 +1,6 @@
 ---
 title: 将Centos的GLIB2升级到GLIB3
-date: 2023-11-05
+date: 2023-11-05 00:00:00
 category:
     - Centos
     - GLIB

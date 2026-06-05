@@ -1,6 +1,6 @@
 ---
 title: 从零开始构建最小化Linux系统
-date: 2026-06-04
+date: 2026-06-04 00:00:00
 category:
   - Linux
 tags:

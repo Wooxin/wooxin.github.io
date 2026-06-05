@@ -1,6 +1,6 @@
 ---
 title: telegram出现SMS Fee解决方法
-date: 2025-09-17
+date: 2025-09-17 00:00:00
 category:
     - 教程
     - 通讯

@@ -1,6 +1,6 @@
 ---
 title: WSL部署及问题解决
-date: 2026-01-01
+date: 2026-01-01 00:00:00
 updated: 2026-01-01
 category:
   - Linux

@@ -6,7 +6,7 @@ category:
 tags:
   - 系统
   - AI
-date: 2026-05-03
+date: 2026-05-03 00:00:00
 ---
 ## ChatGPT
 具体操作步骤: 

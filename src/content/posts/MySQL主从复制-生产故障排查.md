@@ -1,6 +1,6 @@
 ---
 title: 一次 MySQL 主从延迟 14 小时的故障排查
-date: 2024-11-09
+date: 2024-11-09 00:00:00
 category:
     - 运维
     - Linux

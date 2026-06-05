@@ -62,9 +62,9 @@ const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 4);
       </div>
       <div id="post-date" class="d-flex flex-row" style="display:flex;flex-wrap:wrap;align-items:center;gap:0.3rem;margin-bottom:0.4rem;">
         <span class="post-meta-label">创建:</span>
-        <span class="post-meta-value">{post.data.date.toISOString().slice(0,10)}</span>
+        <span class="post-meta-value">{post.data.date.toISOString().replace('T', ' ').slice(0,19)}</span>
         <span class="post-meta-label">更新:</span>
-        <span class="post-meta-value">{(post.data.updated || post.data.date).toISOString().slice(0,10)}</span>
+        <span class="post-meta-value">{(post.data.updated || post.data.date).toISOString().replace('T', ' ').slice(0,19)}</span>
         <span class="post-meta-label">字数:</span>
         <span id="post-count-body"><span class="post-meta-value"><a href="javascript:initWordCountOnly()">0</a> <span>字</span></span></span>
         <span class="post-meta-label">耗时:</span>

@@ -1,6 +1,6 @@
 ---
 title: 在electron中使用pug和stylus
-date: 2025-09-17
+date: 2025-09-17 00:00:00
 category:
     - 教程
     - electron

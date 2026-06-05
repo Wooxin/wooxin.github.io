@@ -179,7 +179,7 @@ allPosts.sort((a, b) => {
                   <span class="post-meta-updated" title="已更新">&#x21BB;</span>
                 )}
                 <time class="post-date" datetime={effDate.toISOString()}>
-                  {effDate.getFullYear().toString().slice(2)}/{String(effDate.getMonth()+1).padStart(2,'0')}/{String(effDate.getDate()).padStart(2,'0')}
+                  {effDate.getFullYear().toString().slice(2)}/{String(effDate.getMonth()+1).padStart(2,'0')}/{String(effDate.getDate()).padStart(2,'0')} {String(effDate.getHours()).padStart(2,'0')}:{String(effDate.getMinutes()).padStart(2,'0')}
                 </time>
               </a>
             )})}

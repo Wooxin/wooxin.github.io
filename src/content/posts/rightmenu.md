@@ -1,6 +1,6 @@
 ---
 title: rightmenu
-date: 2025-09-19
+date: 2025-09-19 00:00:00
 category:
   - 博客
   - 教程

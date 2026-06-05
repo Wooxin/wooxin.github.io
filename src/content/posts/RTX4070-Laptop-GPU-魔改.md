@@ -1,6 +1,6 @@
 ---
 title: RTX 4070 Laptop GPU 魔改全记录——从 115W 到 140W 的榨干之旅
-date: 2024-01-12
+date: 2024-01-12 00:00:00
 category:
     - 硬件
     - 教程

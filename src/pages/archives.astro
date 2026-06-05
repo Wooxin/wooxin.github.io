@@ -24,7 +24,7 @@ posts.sort((a, b) => {
           <a href={getPostUrl(post)}>{post.data.title}</a>
           {stale === 'red' && <span class="stale-badge stale-red" style="margin-left:0.3rem;vertical-align:middle;" title="内容可能过时">!</span>}
           {stale === 'yellow' && <span class="stale-badge stale-yellow" style="margin-left:0.3rem;vertical-align:middle;" title="内容较旧">!</span>}
-          <time style="float:right;color:var(--text-muted);font-size:0.82rem;">{effDate.toISOString().slice(0,10)}</time>
+          <time style="float:right;color:var(--text-muted);font-size:0.82rem;">{effDate.toISOString().replace('T',' ').slice(0,19)}</time>
         </div>
       )})}
     </div>
