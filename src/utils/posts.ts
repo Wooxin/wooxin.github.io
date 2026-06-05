@@ -1,4 +1,6 @@
 import type { CollectionEntry } from 'astro:content';
+import fs from 'fs';
+import path from 'path';
 
 type PostEntry = CollectionEntry<'posts'>;
 
@@ -9,6 +11,25 @@ function hashString(value: string) {
     hash = Math.imul(hash, 0x01000193);
   }
   return (hash >>> 0).toString(16).padStart(8, '0');
+}
+
+/** 读取文章 .md 文件的最后修改时间 */
+export function getFileMtime(post: PostEntry): Date | null {
+  try {
+    const filePath = path.join('src/content/posts', post.id.replace(/^posts\//, ''));
+    const stat = fs.statSync(filePath);
+    return stat.mtime;
+  } catch {
+    return null;
+  }
+}
+
+/** 获取文章的有效日期：有 updated 用 updated，否则用文件修改时间，再否则用 date */
+export function getEffectiveDate(post: PostEntry): Date {
+  if (post.data.updated) return post.data.updated;
+  const mtime = getFileMtime(post);
+  if (mtime && mtime > post.data.date) return mtime;
+  return post.data.date;
 }
 
 export function getPostSlug(post: PostEntry) {

@@ -1,14 +1,12 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-import { getPostSlug } from '../../utils/posts';
+import { getPostSlug, getEffectiveDate, getFileMtime } from '../../utils/posts';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => data.published !== false);
   posts.sort((a, b) => {
-    const aDate = (a.data.updated || a.data.date).getTime();
-    const bDate = (b.data.updated || b.data.date).getTime();
-    return bDate - aDate;
+    return getEffectiveDate(b).getTime() - getEffectiveDate(a).getTime();
   });
   return posts.map((post) => ({
     params: { slug: getPostSlug(post) },
@@ -26,10 +24,12 @@ const cats = post.data.category || [];
 const tags = post.data.tags || [];
 
 const now = new Date();
-const effDate = post.data.updated || post.data.date;
+const effDate = getEffectiveDate(post);
+const fileMtime = getFileMtime(post);
+const updateDate = post.data.updated || (fileMtime && fileMtime > post.data.date ? fileMtime : post.data.date);
 const ageMs = now.getTime() - effDate.getTime();
 const staleLevel = ageMs > 365 * 24 * 60 * 60 * 1000 ? 'red' : ageMs > 90 * 24 * 60 * 60 * 1000 ? 'yellow' : null;
-const hasUpdate = post.data.updated && post.data.updated.getTime() !== post.data.date.getTime();
+const hasUpdate = updateDate.getTime() !== post.data.date.getTime();
 
 const currentIdx = posts.findIndex((p) => p.id === post.id);
 const prevPost = currentIdx > 0 ? posts[currentIdx - 1] : null;
@@ -69,7 +69,7 @@ const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 4);
         <span class="post-meta-label">创建:</span>
         <span class="post-meta-value">{post.data.date.toISOString().replace('T', ' ').slice(0,19)}</span>
         <span class="post-meta-label">更新:</span>
-        <span class="post-meta-value">{(post.data.updated || post.data.date).toISOString().replace('T', ' ').slice(0,19)}</span>
+        <span class="post-meta-value">{updateDate.toISOString().replace('T', ' ').slice(0,19)}</span>
         <span class="post-meta-label">字数:</span>
         <span id="post-count-body"><span class="post-meta-value"><a href="javascript:initWordCountOnly()">0</a> <span>字</span></span></span>
         <span class="post-meta-label">耗时:</span>
