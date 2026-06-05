@@ -77,7 +77,7 @@ html[data-theme='dark'] {
 }
 
 body {
-  font-family: 'HarmonyOS Sans', 'HarmonyOS Sans SC', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'HarmonyOS Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
   background:
     radial-gradient(circle at 18% 0%, rgba(79, 114, 255, 0.08), transparent 28rem),
     linear-gradient(180deg, var(--bg-base) 0%, var(--bg-base) 100%);
@@ -132,35 +132,41 @@ body {
   gap: 0.55rem;
 }
 
-#top-mid-option a.nav-link,
-#top-mid-option span.nav-link {
+#top-mid #top-mid-option a.nav-link,
+#top-mid #top-mid-option span.nav-link {
   min-width: 4.1rem;
   padding: 0.34rem 0.95rem;
   border: 1px solid transparent;
   border-radius: 999px;
   color: var(--text-tertiary);
+  font-size: 0.88rem;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  user-select: none;
+  text-decoration: none;
 }
 
-#top-mid-option a.nav-link:hover,
-#top-mid-option a.nav-link[aria-current='page'] {
+#top-mid #top-mid-option a.nav-link:hover,
+#top-mid #top-mid-option a.nav-link[aria-current='page'],
+#top-mid #top-mid-option span.nav-link:hover {
   color: var(--accent);
   background: transparent;
   border-color: var(--accent);
 }
 
 /* ── Tools dropdown ── */
-#top-mid-option span.nav-dropdown {
+#top-mid #top-mid-option span.nav-dropdown {
   position: relative;
   cursor: default;
   overflow: visible;
-  font-weight: 600;
 }
 
-#top-mid-option span.nav-dropdown .label {
+#top-mid #top-mid-option span.nav-dropdown .label {
   visibility: visible;
 }
 
-#top-mid-option span.nav-dropdown .nav-icon {
+#top-mid #top-mid-option span.nav-dropdown .nav-icon {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -169,20 +175,21 @@ body {
   font-size: 1rem;
 }
 
-#top-mid-option span.nav-dropdown:hover {
-  background-color: var(--accent-light);
+#top-mid #top-mid-option span.nav-dropdown:hover {
   color: var(--accent);
+  background: transparent;
+  border-color: var(--accent);
 }
 
-#top-mid-option span.nav-dropdown:hover .label {
+#top-mid #top-mid-option span.nav-dropdown:hover .label {
   visibility: hidden;
 }
 
-#top-mid-option span.nav-dropdown:hover .nav-icon {
+#top-mid #top-mid-option span.nav-dropdown:hover .nav-icon {
   visibility: visible;
 }
 
-#top-mid-option span.nav-dropdown .dropdown-menu {
+#top-mid #top-mid-option span.nav-dropdown .dropdown-menu {
   display: none;
   position: absolute;
   top: calc(100% + 0.1rem);
@@ -197,11 +204,11 @@ body {
   z-index: 9999;
 }
 
-#top-mid-option span.nav-dropdown:hover .dropdown-menu {
+#top-mid #top-mid-option span.nav-dropdown:hover .dropdown-menu {
   display: block;
 }
 
-#top-mid-option span.nav-dropdown .dropdown-menu .dropdown-item {
+#top-mid #top-mid-option span.nav-dropdown .dropdown-menu .dropdown-item {
   display: block;
   padding: 0.4rem 0.9rem;
   color: var(--text-secondary);
@@ -211,7 +218,7 @@ body {
   text-align: center;
 }
 
-#top-mid-option span.nav-dropdown .dropdown-menu .dropdown-item:hover {
+#top-mid #top-mid-option span.nav-dropdown .dropdown-menu .dropdown-item:hover {
   background: var(--accent-light);
   color: var(--accent);
 }
@@ -253,8 +260,19 @@ body {
   top: 50% !important;
 }
 
+#top-right #top-right-option #Browsing-Progress .progress-toggle > :first-child {
+  visibility: visible !important;
+}
+#top-right #top-right-option #Browsing-Progress .progress-toggle > :nth-child(2) {
+  position: static !important;
+  visibility: visible !important;
+}
+#top-right #top-right-option #progress-pct {
+  visibility: visible !important;
+}
+
 #top-right-option #progress-pct {
-  font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
   font-style: normal;
   font-weight: 700;
   line-height: 1;
@@ -559,6 +577,13 @@ html[data-theme='dark'] #recent-posts .recent-post-item {
   opacity: 0.82;
 }
 
+/* 覆盖 woxhome 的 code/pre 字体堆（HarmonyOS 未加载导致 fallback 到 monospace） */
+#post-content code,
+#post-content pre,
+#post-content pre code {
+  font-family: ui-monospace, 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Consolas, Monaco, monospace;
+}
+
 #mid-right {
   color: var(--text-secondary);
 }
@@ -669,6 +694,13 @@ article#logs {
 
 #post-content p {
   max-width: none;
+}
+
+#post-content code,
+#post-content p code,
+#post-content pre code,
+code {
+  font-family: ui-monospace, 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Consolas, Monaco, monospace;
 }
 
 #post-content p code,

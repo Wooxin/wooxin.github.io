@@ -689,6 +689,11 @@
   }
 
   function navigate(href) {
+    // 同一页面不跳转
+    var currentPath = window.location.pathname + window.location.search + window.location.hash;
+    var targetUrl = new URL(href, window.location.href);
+    var targetPath = targetUrl.pathname + targetUrl.search + targetUrl.hash;
+    if (currentPath === targetPath) return;
     if (abortController) abortController.abort();
     abortController = new AbortController();
     fetch(href, { signal: abortController.signal })
