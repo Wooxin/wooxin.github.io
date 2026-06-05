@@ -686,6 +686,33 @@ article#logs {
   margin: 0.35rem 0;
 }
 
+/* AI Summary */
+.ai-summary {
+  padding: 0.65rem 0.9rem !important;
+  margin: 0 0 1rem 0 !important;
+  background: linear-gradient(135deg, rgba(0,153,255,0.06), rgba(102,51,255,0.06)) !important;
+  border: 1px solid rgba(0,153,255,0.15) !important;
+  border-left: 3px solid var(--accent) !important;
+  border-radius: 0 6px 6px 0 !important;
+  font-size: 0.88rem !important;
+  color: var(--text-secondary) !important;
+  line-height: 1.7 !important;
+}
+.ai-summary-label {
+  display: inline-block;
+  margin-right: 0.5rem;
+  padding: 0.1rem 0.45rem;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 3px;
+  vertical-align: middle;
+}
+html[data-theme='dark'] .ai-summary {
+  background: linear-gradient(135deg, rgba(0,153,255,0.08), rgba(102,51,255,0.08)) !important;
+}
+
 #post-content blockquote {
   border-left-color: var(--accent);
   background: var(--accent-light);

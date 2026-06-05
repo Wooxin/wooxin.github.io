@@ -16,6 +16,11 @@ export async function getStaticPaths() {
   }));
 }
 
+let summaries = {};
+try {
+  summaries = (await import('../../data/summaries.json')).default;
+} catch (e) { /* JSON 文件尚未生成 */ }
+
 const { post, posts } = Astro.props;
 const cats = post.data.category || [];
 const tags = post.data.tags || [];
@@ -87,6 +92,16 @@ const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 4);
     </div>
     <div class="scrollable-container">
       <div id="post-content">
+        {(() => {
+          const fileName = post.id.replace(/^posts\//, '');
+          const summary = summaries?.[fileName];
+          return summary ? (
+            <blockquote class="ai-summary">
+              <span class="ai-summary-label">AI 摘要</span>
+              {summary}
+            </blockquote>
+          ) : null;
+        })()}
         <Content />
         <hr />
         <div id="post-info">
