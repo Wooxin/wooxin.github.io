@@ -86,6 +86,8 @@ body {
 
 #layout-top {
   padding: 0.65rem 1rem 0.45rem;
+  position: relative;
+  z-index: 100;
 }
 
 #layout-top #top-main {
@@ -130,7 +132,8 @@ body {
   gap: 0.55rem;
 }
 
-#top-mid-option a.nav-link {
+#top-mid-option a.nav-link,
+#top-mid-option span.nav-link {
   min-width: 4.1rem;
   padding: 0.34rem 0.95rem;
   border: 1px solid transparent;
@@ -146,60 +149,71 @@ body {
 }
 
 /* ── Tools dropdown ── */
-.nav-dropdown {
+#top-mid-option span.nav-dropdown {
   position: relative;
-}
-
-#top-mid-option .nav-dropdown {
-  min-width: 4.1rem;
-  padding: 0.34rem 0.95rem;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  color: var(--text-tertiary);
   cursor: default;
+  overflow: visible;
+  font-weight: 600;
 }
 
-#top-mid-option .nav-dropdown:hover {
+#top-mid-option span.nav-dropdown .label {
+  visibility: visible;
+}
+
+#top-mid-option span.nav-dropdown .nav-icon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  visibility: hidden;
+  font-size: 1rem;
+}
+
+#top-mid-option span.nav-dropdown:hover {
+  background-color: var(--accent-light);
   color: var(--accent);
-  border-color: var(--accent);
 }
 
-.dropdown-menu {
+#top-mid-option span.nav-dropdown:hover .label {
+  visibility: hidden;
+}
+
+#top-mid-option span.nav-dropdown:hover .nav-icon {
+  visibility: visible;
+}
+
+#top-mid-option span.nav-dropdown .dropdown-menu {
   display: none;
   position: absolute;
-  top: 100%;
+  top: calc(100% + 0.1rem);
   left: 50%;
   transform: translateX(-50%);
-  margin-top: 0.4rem;
-  padding: 0.4rem 0;
+  padding: 0.35rem 0;
   background: var(--bg-elevated);
   border: var(--border-subtle);
-  border-radius: 0.65rem;
+  border-radius: 0.55rem;
   box-shadow: var(--shadow-md);
-  min-width: 8.5rem;
-  z-index: 200;
+  min-width: 7.5rem;
+  z-index: 9999;
 }
 
-.nav-dropdown:hover .dropdown-menu {
+#top-mid-option span.nav-dropdown:hover .dropdown-menu {
   display: block;
 }
 
-.dropdown-menu .dropdown-item {
+#top-mid-option span.nav-dropdown .dropdown-menu .dropdown-item {
   display: block;
-  padding: 0.45rem 1rem;
+  padding: 0.4rem 0.9rem;
   color: var(--text-secondary);
-  font-size: 0.84rem;
+  font-size: 0.82rem;
+  text-decoration: none;
   white-space: nowrap;
-  border: none;
-  border-radius: 0;
-  background: transparent;
-  transition: background 0.15s, color 0.15s;
+  text-align: center;
 }
 
-.dropdown-menu .dropdown-item:hover {
+#top-mid-option span.nav-dropdown .dropdown-menu .dropdown-item:hover {
   background: var(--accent-light);
   color: var(--accent);
-  border: none;
 }
 
 #top-right-option {
@@ -266,17 +280,22 @@ html[data-theme='dark'] .dark-icon { display: block; }
   color: var(--accent);
 }
 
-/* Fix i18n dropdown not being clipped */
+/* Fix dropdown menus not being clipped */
 #layout-top,
 #top-main,
 #top-main > div,
+#top-col-left,
+#top-col-mid,
 #top-col-right,
+#top-mid,
 #top-right,
-#top-right-option {
+#top-right-option,
+#top-mid-option {
   overflow: visible !important;
 }
 
-#language-i18n {
+#language-i18n,
+.nav-dropdown {
   position: relative;
   z-index: 600;
   cursor: pointer;
@@ -551,6 +570,56 @@ div#archive,
 #tags,
 article#logs {
   padding: 1.55rem 1.75rem;
+}
+
+/* Staleness badges */
+.stale-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-left: 0.25rem;
+  border-radius: 50%;
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.stale-red {
+  background: rgba(220, 40, 40, 0.13);
+  color: #dc2828;
+}
+.stale-yellow {
+  background: rgba(200, 150, 20, 0.13);
+  color: #c89614;
+}
+
+.post-meta-updated {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.2rem;
+  color: var(--accent);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.stale-notice {
+  margin: 0.5rem 0 0;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.stale-notice-red {
+  background: rgba(220, 40, 40, 0.07);
+  border: 1px solid rgba(220, 40, 40, 0.18);
+  color: #dc2828;
+}
+.stale-notice-yellow {
+  background: rgba(200, 150, 20, 0.07);
+  border: 1px solid rgba(200, 150, 20, 0.18);
+  color: #c89614;
 }
 
 #home #home-head h1,

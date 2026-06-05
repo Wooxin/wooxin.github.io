@@ -4,19 +4,29 @@ import { getCollection } from 'astro:content';
 import { getPostUrl } from '../utils/posts';
 
 const posts = await getCollection('posts', ({ data }) => data.published !== false);
-posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+posts.sort((a, b) => {
+  const aDate = (a.data.updated || a.data.date).getTime();
+  const bDate = (b.data.updated || b.data.date).getTime();
+  return bDate - aDate;
+});
 ---
 
 <BaseLayout title="归档">
   <div id="archive" style="height:fit-content;max-height:100vh;overflow-y:auto;padding:1.5rem;">
     <h1>归档</h1>
     <div class="archive-list">
-      {posts.map(post => (
+      {posts.map(post => {
+        const effDate = post.data.updated || post.data.date;
+        const ageMs = Date.now() - effDate.getTime();
+        const stale = ageMs > 365 * 24 * 60 * 60 * 1000 ? 'red' : ageMs > 90 * 24 * 60 * 60 * 1000 ? 'yellow' : null;
+        return (
         <div class="archive-list-item" style="padding:0.75rem 1rem;margin:0.25rem 0;border-radius:0.6rem;background:var(--bg-surface);border:var(--border-subtle);box-shadow:var(--shadow-sm);">
           <a href={getPostUrl(post)}>{post.data.title}</a>
-          <time style="float:right;color:var(--text-muted);font-size:0.82rem;">{post.data.date.toISOString().slice(0,10)}</time>
+          {stale === 'red' && <span class="stale-badge stale-red" style="margin-left:0.3rem;vertical-align:middle;" title="内容可能过时">!</span>}
+          {stale === 'yellow' && <span class="stale-badge stale-yellow" style="margin-left:0.3rem;vertical-align:middle;" title="内容较旧">!</span>}
+          <time style="float:right;color:var(--text-muted);font-size:0.82rem;">{effDate.toISOString().slice(0,10)}</time>
         </div>
-      ))}
+      )})}
     </div>
   </div>
 </BaseLayout>

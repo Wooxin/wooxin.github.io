@@ -5,7 +5,11 @@ import { getPostSlug } from '../../utils/posts';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => data.published !== false);
-  posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  posts.sort((a, b) => {
+    const aDate = (a.data.updated || a.data.date).getTime();
+    const bDate = (b.data.updated || b.data.date).getTime();
+    return bDate - aDate;
+  });
   return posts.map((post) => ({
     params: { slug: getPostSlug(post) },
     props: { post, posts },
@@ -15,6 +19,12 @@ export async function getStaticPaths() {
 const { post, posts } = Astro.props;
 const cats = post.data.category || [];
 const tags = post.data.tags || [];
+
+const now = new Date();
+const effDate = post.data.updated || post.data.date;
+const ageMs = now.getTime() - effDate.getTime();
+const staleLevel = ageMs > 365 * 24 * 60 * 60 * 1000 ? 'red' : ageMs > 90 * 24 * 60 * 60 * 1000 ? 'yellow' : null;
+const hasUpdate = post.data.updated && post.data.updated.getTime() !== post.data.date.getTime();
 
 const currentIdx = posts.findIndex((p) => p.id === post.id);
 const prevPost = currentIdx > 0 ? posts[currentIdx - 1] : null;
@@ -51,10 +61,14 @@ const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 4);
         </div>
       </div>
       <div id="post-date" class="d-flex flex-row" style="display:flex;flex-wrap:wrap;align-items:center;gap:0.3rem;margin-bottom:0.4rem;">
+        {post.data.updated && post.data.updated.getTime() !== post.data.date.getTime() ? (
+          <>
+            <span class="post-meta-label">更新:</span>
+            <span class="post-meta-value">{post.data.updated.toISOString().slice(0,10)}</span>
+          </>
+        ) : null}
         <span class="post-meta-label">创建:</span>
         <span class="post-meta-value">{post.data.date.toISOString().slice(0,10)}</span>
-        <span class="post-meta-label">更新:</span>
-        <span class="post-meta-value">{post.data.updated ? post.data.updated.toISOString().slice(0,10) : post.data.date.toISOString().slice(0,10)}</span>
         <span class="post-meta-label">字数:</span>
         <span id="post-count-body"><span class="post-meta-value"><a href="javascript:initWordCountOnly()">0</a> <span>字</span></span></span>
         <span class="post-meta-label">耗时:</span>
@@ -66,6 +80,13 @@ const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 4);
         <span class="post-meta-label">标签:</span>
         <span class="post-meta-value">{tags.join(', ')}</span>
       </div>
+      {staleLevel && (
+        <div class={`stale-notice stale-notice-${staleLevel}`}>
+          {staleLevel === 'red'
+            ? '⚠ 本文最后更新于一年前，内容可能已经过时，请注意甄别。'
+            : '⚠ 本文最后更新于三个月前，部分内容可能已不适用。'}
+        </div>
+      )}
       <hr />
     </div>
     <div class="scrollable-container">

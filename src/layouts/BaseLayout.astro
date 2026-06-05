@@ -14,8 +14,25 @@ const { title, description } = Astro.props;
 const pageTitle = `${title} [ 《书集》 ]`;
 const siteUrl = Astro.site?.href?.replace(/\/$/, '') || 'https://wooxin.github.io';
 
+const now = new Date();
+const THREE_MONTHS = 1000 * 60 * 60 * 24 * 90;
+const ONE_YEAR = 1000 * 60 * 60 * 24 * 365;
+
+function getEffectiveDate(post) {
+  return post.data.updated || post.data.date;
+}
+
+function getStaleness(post) {
+  const age = now.getTime() - getEffectiveDate(post).getTime();
+  if (age > ONE_YEAR) return 'red';
+  if (age > THREE_MONTHS) return 'yellow';
+  return null;
+}
+
 const allPosts = await getCollection('posts', ({ data }) => data.published !== false);
-allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+allPosts.sort((a, b) => {
+  return getEffectiveDate(b).getTime() - getEffectiveDate(a).getTime();
+});
 ---
 
 <!DOCTYPE html>
@@ -70,7 +87,7 @@ allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
             <a class="nav-link" href="/categories/"><span class="label categories">分类</span><span class="nav-icon">C</span></a>
             <a class="nav-link" href="/tags/"><span class="label tags">标签</span><span class="nav-icon">T</span></a>
             <a class="nav-link" href="/logs/"><span class="label logs">日志</span><span class="nav-icon">L</span></a>
-            <div class="nav-link nav-dropdown">
+            <span class="nav-link nav-dropdown" tabindex="0">
               <span class="label tools">工具</span><span class="nav-icon">U</span>
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="/tools/#calculator">计算器</a>
@@ -78,9 +95,10 @@ allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
                 <a class="dropdown-item" href="/tools/#color">颜色选择器</a>
                 <a class="dropdown-item" href="/tools/#json">JSON 格式化</a>
                 <a class="dropdown-item" href="/tools/#base">进制换算</a>
+                <a class="dropdown-item" href="/tools/#byte">字节换算</a>
                 <a class="dropdown-item" href="/tools/#md5">哈希生成</a>
               </div>
-            </div>
+            </span>
           </nav>
         </div>
       </div>
@@ -142,7 +160,11 @@ allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
             </div>
           </nav>
           <div id="recent-posts">
-            {allPosts.map((post, i) => (
+            {allPosts.map((post, i) => {
+              const stale = getStaleness(post);
+              const effDate = getEffectiveDate(post);
+              const hasUpdate = post.data.updated && post.data.updated.getTime() !== post.data.date.getTime();
+              return (
               <a
                 class={`recent-post-item${i < 3 ? ' new-post' : ''}`}
                 href={getPostUrl(post)}
@@ -150,12 +172,16 @@ allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
               >
                 <span class="icon"><i class="icon-main">&#x203A;</i><i class="icon-hover">&#x203A;</i></span>
                 <span class="post-title">{post.data.title}</span>
-                {i < 3 && <span class="new-badge">新</span>}
-                <time class="post-date" datetime={post.data.date.toISOString()}>
-                  {post.data.date.getFullYear().toString().slice(2)}/{String(post.data.date.getMonth()+1).padStart(2,'0')}/{String(post.data.date.getDate()).padStart(2,'0')}
+                {stale === 'red' && <span class="stale-badge stale-red" title="内容可能过时">!</span>}
+                {stale === 'yellow' && <span class="stale-badge stale-yellow" title="内容较旧">!</span>}
+                {hasUpdate && (
+                  <span class="post-meta-updated" title="已更新">&#x21BB;</span>
+                )}
+                <time class="post-date" datetime={effDate.toISOString()}>
+                  {effDate.getFullYear().toString().slice(2)}/{String(effDate.getMonth()+1).padStart(2,'0')}/{String(effDate.getDate()).padStart(2,'0')}
                 </time>
               </a>
-            ))}
+            )})}
           </div>
         </slot>
       </div>
@@ -233,6 +259,12 @@ allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
     <span>&#x2630;</span>
   </div>
 
+  <script is:inline>
+    document.addEventListener('click', function(e) {
+      var item = e.target.closest('.dropdown-item');
+      if (item) { window.location.href = item.getAttribute('href'); }
+    });
+  </script>
   <script is:inline src="/scripts/bundle.js"></script>
 </body>
 </html>

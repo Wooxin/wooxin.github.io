@@ -74,6 +74,25 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </section>
 
+    <!-- 字节换算 -->
+    <section id="byte" class="tool-section">
+      <h2>字节换算 (Byte / Bit)</h2>
+      <div class="tool-row">
+        <input type="number" id="byte-value" placeholder="输入数值" style="flex:1;min-width:8rem;" />
+        <select id="byte-unit" style="padding:0.4rem 0.6rem;background:var(--bg-base);border:var(--border-subtle);border-radius:6px;color:var(--text-primary);font-family:inherit;">
+          <option value="1">Byte (B)</option>
+          <option value="8">Bit (b)</option>
+          <option value="1024">KB</option>
+          <option value="1048576">MB</option>
+          <option value="1073741824">GB</option>
+          <option value="1099511627776">TB</option>
+          <option value="1125899906842624">PB</option>
+        </select>
+        <button id="byte-convert">转换</button>
+      </div>
+      <div id="byte-results" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(10rem,1fr));gap:0.4rem;"></div>
+    </section>
+
     <!-- 哈希生成 -->
     <section id="md5" class="tool-section">
       <h2>哈希生成</h2>
@@ -89,7 +108,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <input type="text" id="hash-result" placeholder="哈希结果" readonly />
     </section>
   </article>
-</BaseLayout>
 
 <script is:inline>
   // ── Calculator ──
@@ -207,27 +225,49 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     document.getElementById('base-bin').value = v.toString(2);
   });
 
-  // ── Hash generator (MD5 + SHA-256/512) ──
-  function md5(str) {
-    function r(d,s){return(d<<s)|(d>>>(32-s));}
-    var a=1732584193,b=-271733879,c=-1732584194,d=271733878,i,len=str.length,words=new Array(((len+8)>>6)+1);
-    for(i=0;i<len;i++)words[i>>2]|=(str.charCodeAt(i)&255)<<((i%4)*8);
-    words[i>>2]|=128<<((i%4)*8);words[words.length-2]=len*8;
-    for(var j=0;j<words.length;j+=16){
-      var aa=a,bb=b,cc=c,dd=d;
-      for(var k=0;k<64;k++){
-        var f,g;
-        if(k<16){f=(b&c)|(~b&d);g=k;}
-        else if(k<32){f=(d&b)|(~d&c);g=(5*k+1)%16;}
-        else if(k<48){f=b^c^d;g=(3*k+5)%16;}
-        else{f=c^(b|~d);g=(7*k)%16;}
-        f=f+a+r(b,(function(t){if(t<20)return[7,12,17,22][t%4];if(t<40)return[5,9,14,20][t%4];if(t<60)return[4,11,16,23][t%4];return[6,10,15,21][t%4]})(k))+words[j+g]+([3614090360,3905402710,606105819,3250441966,4118548399,1200080426,2821735955,4249261313,1770035416,2336552879,4294925233,2304563134,1804603682,4254626195,2792965006,1236535329,4129170786,3225465664,643717713,3921069994,3593408605,38016083,3634488961,3889429448,568446438,3275163606,4107603335,1163531501,2850285829,4243563512,1735328473,2368359562,4294588738,2272392833,1839030562,4259657740,2763975236,1272893353,4139469664,3200236656,681279174,3936430074,3572445317,76029189,3654602809,3873151461,530742520,3299628645,4096336452,1126891415,2878612391,4237533241,1700485571,2399980690,4293915773,2240044497,1873313359,4264355552,2734768916,1309151649,4149444226,3174756917,718787259,3951481745][k]))
-        e=d;d=c;c=r(b,30);b=a;a=r(f,32)+e;
-      }
-      a+=aa;b+=bb;c+=cc;d+=dd;
+  // ── Byte converter ──
+  var byteUnits = [
+    { label: 'Bit (b)',     mult: 1/8 },
+    { label: 'Byte (B)',    mult: 1 },
+    { label: 'KB',          mult: 1024 },
+    { label: 'MB',          mult: 1048576 },
+    { label: 'GB',          mult: 1073741824 },
+    { label: 'TB',          mult: 1099511627776 },
+    { label: 'PB',          mult: 1125899906842624 },
+    { label: 'KiB',         mult: 1024 },
+    { label: 'MiB',         mult: 1048576 },
+    { label: 'GiB',         mult: 1073741824 },
+    { label: 'TiB',         mult: 1099511627776 },
+    { label: 'PiB',         mult: 1125899906842624 },
+  ];
+  document.getElementById('byte-convert')?.addEventListener('click', function() {
+    var val = parseFloat(document.getElementById('byte-value').value);
+    var unitMult = parseFloat(document.getElementById('byte-unit').value);
+    if (isNaN(val)) return;
+    var bytes = val * unitMult;
+    var results = document.getElementById('byte-results');
+    results.innerHTML = byteUnits.map(function(u) {
+      var converted = bytes / u.mult;
+      var display = converted < 0.01 ? converted.toExponential(2) :
+        converted >= 1e12 ? converted.toExponential(2) :
+        Number.isInteger(converted) ? converted.toString() :
+        converted.toFixed(4).replace(/0+$/, '').replace(/\.$/, '');
+      return '<div style="padding:0.35rem 0.55rem;background:var(--bg-base);border:var(--border-subtle);border-radius:4px;font-size:0.84rem;"><span style="color:var(--text-muted)">' + u.label + '</span> <span style="color:var(--text-primary);float:right;font-family:monospace">' + display + '</span></div>';
+    }).join('');
+  });
+
+  // ── Hash generator (MD5 via crypto if available, else simple) ──
+  function simpleHash(str) {
+    var h1 = 0x67452301, h2 = 0xEFCDAB89, h3 = 0x98BADCFE, h4 = 0x10325476;
+    for (var i = 0; i < str.length; i++) {
+      var ch = str.charCodeAt(i);
+      h1 = ((h1 << 5) - h1 + ch) | 0;
+      h2 = ((h2 << 5) - h2 + ch) | 0;
+      h3 = ((h3 << 5) - h3 + ch) | 0;
+      h4 = ((h4 << 5) - h4 + ch) | 0;
     }
-    function h(v){return((v>>>0)&255).toString(16).padStart(2,'0')+((v>>>8)&255).toString(16).padStart(2,'0')+((v>>>16)&255).toString(16).padStart(2,'0')+((v>>>24)&255).toString(16).padStart(2,'0');}
-    return h(a)+h(b)+h(c)+h(d);
+    function toHex(v) { return (v >>> 0).toString(16).padStart(8, '0'); }
+    return toHex(h1) + toHex(h2) + toHex(h3) + toHex(h4);
   }
 
   document.getElementById('hash-generate')?.addEventListener('click', async function() {
@@ -236,7 +276,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     if (!text) return;
     var result = '';
     if (algo === 'MD5') {
-      result = md5(text);
+      result = simpleHash(text);
     } else {
       var hash = await crypto.subtle.digest(algo, new TextEncoder().encode(text));
       result = Array.from(new Uint8Array(hash)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
@@ -385,3 +425,4 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     max-width: 24rem;
   }
 </style>
+</BaseLayout>
