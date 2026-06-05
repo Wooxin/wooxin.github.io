@@ -5,7 +5,12 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-const API_KEY = 'ark-bf3ab5a2-6b5c-4236-ac4f-677090f8eb05-b5561';
+const API_KEY = process.env.VOLCENGINE_API_KEY;
+if (!API_KEY) {
+  console.error('请设置 VOLCENGINE_API_KEY 环境变量');
+  console.error('例: VOLCENGINE_API_KEY=ark-xxx node scripts/summarize.mjs');
+  process.exit(1);
+}
 const API_URL = 'https://ark.cn-beijing.volces.com/api/v3/responses';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_FILE = path.resolve(__dirname, '../src/data/summaries.json');
