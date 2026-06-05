@@ -1,0 +1,387 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="工具">
+  <article id="tools-page">
+    <h1>工具</h1>
+    <p style="color:var(--text-secondary);margin-bottom:1.5rem;">常用开发与运维小工具，数据只在浏览器本地处理，不上传服务器。</p>
+
+    <!-- 计算器 -->
+    <section id="calculator" class="tool-section">
+      <h2>计算器</h2>
+      <div class="tool-calc">
+        <div class="calc-display" id="calc-display">0</div>
+        <div class="calc-buttons" id="calc-buttons">
+          <button data-action="clear">C</button><button data-action="back">⌫</button><button data-action="operator" data-value="/">/</button><button data-action="operator" data-value="*">×</button>
+          <button data-action="digit" data-value="7">7</button><button data-action="digit" data-value="8">8</button><button data-action="digit" data-value="9">9</button><button data-action="operator" data-value="-">−</button>
+          <button data-action="digit" data-value="4">4</button><button data-action="digit" data-value="5">5</button><button data-action="digit" data-value="6">6</button><button data-action="operator" data-value="+">+</button>
+          <button data-action="digit" data-value="1">1</button><button data-action="digit" data-value="2">2</button><button data-action="digit" data-value="3">3</button><button data-action="equals">=</button>
+          <button data-action="digit" data-value="0" style="grid-column:span 2">0</button><button data-action="digit" data-value=".">.</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 时间戳转换 -->
+    <section id="timestamp" class="tool-section">
+      <h2>时间戳转换</h2>
+      <div class="tool-row">
+        <label>Unix 时间戳 (秒)</label>
+        <input type="number" id="ts-input" placeholder="输入时间戳" />
+        <button id="ts-to-date">→ 日期</button>
+      </div>
+      <div class="tool-row">
+        <label>北京时间</label>
+        <input type="text" id="ts-result" placeholder="转换结果" readonly />
+        <button id="ts-now">当前时间戳</button>
+      </div>
+    </section>
+
+    <!-- 颜色选择器 -->
+    <section id="color" class="tool-section">
+      <h2>颜色选择器</h2>
+      <div class="tool-color">
+        <input type="color" id="color-picker" value="#0070f3" />
+        <div class="color-values">
+          <div class="tool-row"><label>HEX</label><input type="text" id="color-hex" value="#0070f3" /></div>
+          <div class="tool-row"><label>RGB</label><input type="text" id="color-rgb" value="rgb(0,112,243)" readonly /></div>
+          <div class="tool-row"><label>HSL</label><input type="text" id="color-hsl" value="hsl(212,100%,48%)" readonly /></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- JSON 格式化 -->
+    <section id="json" class="tool-section">
+      <h2>JSON 格式化</h2>
+      <textarea id="json-input" placeholder='粘贴 JSON，如 {"name":"test","val":123}'></textarea>
+      <div class="tool-row">
+        <button id="json-format">格式化</button>
+        <button id="json-minify">压缩</button>
+        <button id="json-clear">清空</button>
+      </div>
+      <textarea id="json-output" placeholder="结果" readonly></textarea>
+      <div id="json-error" style="color:var(--accent,red);display:none;margin-top:0.3rem;font-size:0.85rem;"></div>
+    </section>
+
+    <!-- 进制换算 -->
+    <section id="base" class="tool-section">
+      <h2>进制换算</h2>
+      <div class="base-grid">
+        <div class="tool-row"><label>十进制</label><input type="text" id="base-dec" placeholder="输入数字" /></div>
+        <div class="tool-row"><label>十六进制</label><input type="text" id="base-hex" placeholder="HEX" readonly /></div>
+        <div class="tool-row"><label>八进制</label><input type="text" id="base-oct" placeholder="OCT" readonly /></div>
+        <div class="tool-row"><label>二进制</label><input type="text" id="base-bin" placeholder="BIN" readonly /></div>
+      </div>
+    </section>
+
+    <!-- 哈希生成 -->
+    <section id="md5" class="tool-section">
+      <h2>哈希生成</h2>
+      <textarea id="hash-input" placeholder="输入文本"></textarea>
+      <div class="tool-row">
+        <select id="hash-algo" style="padding:0.4rem 0.6rem;background:var(--bg-base);border:var(--border-subtle);border-radius:6px;color:var(--text-primary);font-family:inherit;">
+          <option value="MD5">MD5</option>
+          <option value="SHA-256">SHA-256</option>
+          <option value="SHA-512">SHA-512</option>
+        </select>
+        <button id="hash-generate">生成</button>
+      </div>
+      <input type="text" id="hash-result" placeholder="哈希结果" readonly />
+    </section>
+  </article>
+</BaseLayout>
+
+<script is:inline>
+  // ── Calculator ──
+  (function() {
+    const display = document.getElementById('calc-display');
+    if (!display) return;
+    let current = '0', prev = '', op = '', reset = false;
+
+    document.getElementById('calc-buttons').addEventListener('click', function(e) {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      const action = btn.dataset.action;
+      const value = btn.dataset.value;
+
+      if (action === 'digit') {
+        if (reset) { current = '0'; reset = false; }
+        current = current === '0' && value !== '.' ? value : current + value;
+      } else if (action === 'operator') {
+        if (prev && !reset) { current = String(eval(prev + op + current)); }
+        prev = current; op = value; reset = true;
+      } else if (action === 'equals') {
+        if (prev && op) { current = String(eval(prev + op + current)); prev = ''; op = ''; }
+        reset = true;
+      } else if (action === 'clear') {
+        current = '0'; prev = ''; op = ''; reset = false;
+      } else if (action === 'back') {
+        current = current.length > 1 ? current.slice(0, -1) : '0';
+      }
+      display.textContent = current;
+    });
+  })();
+
+  // ── Timestamp ──
+  document.getElementById('ts-to-date')?.addEventListener('click', function() {
+    const ts = parseInt(document.getElementById('ts-input').value);
+    if (!ts) return;
+    const d = new Date(ts * 1000);
+    document.getElementById('ts-result').value =
+      d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0') + ' ' +
+      String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0') + ':' + String(d.getSeconds()).padStart(2,'0');
+  });
+  document.getElementById('ts-now')?.addEventListener('click', function() {
+    const ts = Math.floor(Date.now() / 1000);
+    document.getElementById('ts-input').value = ts;
+    document.getElementById('ts-to-date').click();
+  });
+
+  // ── Color picker ──
+  (function() {
+    const picker = document.getElementById('color-picker');
+    const hexIn = document.getElementById('color-hex');
+    const rgbOut = document.getElementById('color-rgb');
+    const hslOut = document.getElementById('color-hsl');
+    if (!picker) return;
+
+    function hexToRgb(hex) {
+      const r = parseInt(hex.slice(1,3), 16);
+      const g = parseInt(hex.slice(3,5), 16);
+      const b = parseInt(hex.slice(5,7), 16);
+      return { r, g, b };
+    }
+    function rgbToHsl(r, g, b) {
+      r /= 255; g /= 255; b /= 255;
+      const max = Math.max(r,g,b), min = Math.min(r,g,b);
+      let h = 0, s = 0, l = (max + min) / 2;
+      if (max !== min) {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        h = max === r ? ((g-b)/d + (g<b?6:0)) / 6 : max === g ? ((b-r)/d + 2) / 6 : ((r-g)/d + 4) / 6;
+      }
+      return { h: Math.round(h*360), s: Math.round(s*100), l: Math.round(l*100) };
+    }
+    function update(hex) {
+      hexIn.value = hex;
+      const { r, g, b } = hexToRgb(hex);
+      rgbOut.value = 'rgb(' + r + ',' + g + ',' + b + ')';
+      const hsl = rgbToHsl(r, g, b);
+      hslOut.value = 'hsl(' + hsl.h + ',' + hsl.s + '%,' + hsl.l + '%)';
+    }
+    picker.addEventListener('input', function() { update(this.value); });
+    hexIn.addEventListener('change', function() {
+      if (/^#[0-9a-fA-F]{6}$/.test(this.value)) { picker.value = this.value; update(this.value); }
+    });
+  })();
+
+  // ── JSON formatter ──
+  document.getElementById('json-format')?.addEventListener('click', function() {
+    const err = document.getElementById('json-error');
+    err.style.display = 'none';
+    try {
+      const obj = JSON.parse(document.getElementById('json-input').value);
+      document.getElementById('json-output').value = JSON.stringify(obj, null, 2);
+    } catch(e) { err.textContent = 'JSON 格式错误: ' + e.message; err.style.display = 'block'; }
+  });
+  document.getElementById('json-minify')?.addEventListener('click', function() {
+    const err = document.getElementById('json-error');
+    err.style.display = 'none';
+    try {
+      const obj = JSON.parse(document.getElementById('json-input').value);
+      document.getElementById('json-output').value = JSON.stringify(obj);
+    } catch(e) { err.textContent = 'JSON 格式错误: ' + e.message; err.style.display = 'block'; }
+  });
+  document.getElementById('json-clear')?.addEventListener('click', function() {
+    document.getElementById('json-input').value = '';
+    document.getElementById('json-output').value = '';
+    document.getElementById('json-error').style.display = 'none';
+  });
+
+  // ── Base converter ──
+  document.getElementById('base-dec')?.addEventListener('input', function() {
+    const v = parseInt(this.value);
+    if (isNaN(v)) { document.getElementById('base-hex').value = document.getElementById('base-oct').value = document.getElementById('base-bin').value = ''; return; }
+    document.getElementById('base-hex').value = v.toString(16).toUpperCase();
+    document.getElementById('base-oct').value = v.toString(8);
+    document.getElementById('base-bin').value = v.toString(2);
+  });
+
+  // ── Hash generator (MD5 + SHA-256/512) ──
+  function md5(str) {
+    function r(d,s){return(d<<s)|(d>>>(32-s));}
+    var a=1732584193,b=-271733879,c=-1732584194,d=271733878,i,len=str.length,words=new Array(((len+8)>>6)+1);
+    for(i=0;i<len;i++)words[i>>2]|=(str.charCodeAt(i)&255)<<((i%4)*8);
+    words[i>>2]|=128<<((i%4)*8);words[words.length-2]=len*8;
+    for(var j=0;j<words.length;j+=16){
+      var aa=a,bb=b,cc=c,dd=d;
+      for(var k=0;k<64;k++){
+        var f,g;
+        if(k<16){f=(b&c)|(~b&d);g=k;}
+        else if(k<32){f=(d&b)|(~d&c);g=(5*k+1)%16;}
+        else if(k<48){f=b^c^d;g=(3*k+5)%16;}
+        else{f=c^(b|~d);g=(7*k)%16;}
+        f=f+a+r(b,(function(t){if(t<20)return[7,12,17,22][t%4];if(t<40)return[5,9,14,20][t%4];if(t<60)return[4,11,16,23][t%4];return[6,10,15,21][t%4]})(k))+words[j+g]+([3614090360,3905402710,606105819,3250441966,4118548399,1200080426,2821735955,4249261313,1770035416,2336552879,4294925233,2304563134,1804603682,4254626195,2792965006,1236535329,4129170786,3225465664,643717713,3921069994,3593408605,38016083,3634488961,3889429448,568446438,3275163606,4107603335,1163531501,2850285829,4243563512,1735328473,2368359562,4294588738,2272392833,1839030562,4259657740,2763975236,1272893353,4139469664,3200236656,681279174,3936430074,3572445317,76029189,3654602809,3873151461,530742520,3299628645,4096336452,1126891415,2878612391,4237533241,1700485571,2399980690,4293915773,2240044497,1873313359,4264355552,2734768916,1309151649,4149444226,3174756917,718787259,3951481745][k]))
+        e=d;d=c;c=r(b,30);b=a;a=r(f,32)+e;
+      }
+      a+=aa;b+=bb;c+=cc;d+=dd;
+    }
+    function h(v){return((v>>>0)&255).toString(16).padStart(2,'0')+((v>>>8)&255).toString(16).padStart(2,'0')+((v>>>16)&255).toString(16).padStart(2,'0')+((v>>>24)&255).toString(16).padStart(2,'0');}
+    return h(a)+h(b)+h(c)+h(d);
+  }
+
+  document.getElementById('hash-generate')?.addEventListener('click', async function() {
+    var text = document.getElementById('hash-input').value;
+    var algo = document.getElementById('hash-algo').value;
+    if (!text) return;
+    var result = '';
+    if (algo === 'MD5') {
+      result = md5(text);
+    } else {
+      var hash = await crypto.subtle.digest(algo, new TextEncoder().encode(text));
+      result = Array.from(new Uint8Array(hash)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+    }
+    document.getElementById('hash-result').value = result;
+  });
+</script>
+
+<style>
+  article#tools-page {
+    padding: 1.5rem 1.75rem;
+  }
+  article#tools-page h1 {
+    font-size: clamp(1.9rem, 3vw, 2.55rem);
+    line-height: 1.18;
+    color: var(--text-primary);
+    margin: 0 0 0.2rem;
+  }
+  article#tools-page h2 {
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    margin: 1.5rem 0 0.6rem;
+    padding-bottom: 0.4rem;
+    border-bottom: var(--border-subtle);
+  }
+  .tool-section {
+    margin-bottom: 1.2rem;
+  }
+  .tool-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .tool-row label {
+    min-width: 6rem;
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+  }
+  .tool-row input {
+    flex: 1;
+    min-width: 10rem;
+    padding: 0.4rem 0.6rem;
+    background: var(--bg-base);
+    border: var(--border-subtle);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 0.88rem;
+    font-family: inherit;
+  }
+  .tool-row button,
+  article#tools-page button {
+    padding: 0.4rem 0.85rem;
+    background: var(--bg-surface);
+    border: var(--border-subtle);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    font-size: 0.84rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s, color 0.15s;
+  }
+  .tool-row button:hover,
+  article#tools-page button:hover {
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+  article#tools-page textarea {
+    width: 100%;
+    min-height: 5.5rem;
+    padding: 0.55rem 0.65rem;
+    background: var(--bg-base);
+    border: var(--border-subtle);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    resize: vertical;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Calculator */
+  .tool-calc {
+    max-width: 18rem;
+    border: var(--border-subtle);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .calc-display {
+    padding: 0.7rem 0.9rem;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    text-align: right;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    min-height: 3rem;
+    word-break: break-all;
+  }
+  .calc-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border-subtle);
+  }
+  .calc-buttons button {
+    padding: 0.6rem 0;
+    background: var(--bg-surface);
+    border: none;
+    border-radius: 0;
+    font-size: 1rem;
+    color: var(--text-primary);
+  }
+  .calc-buttons button[data-action="operator"],
+  .calc-buttons button[data-action="equals"] {
+    background: var(--accent-light);
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .calc-buttons button:hover {
+    background: var(--bg-surface-hover) !important;
+  }
+
+  /* Color picker */
+  .tool-color {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  #color-picker {
+    width: 4rem;
+    height: 4rem;
+    border: var(--border-subtle);
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 2px;
+  }
+  .color-values {
+    flex: 1;
+    min-width: 14rem;
+  }
+
+  /* Base converter */
+  .base-grid {
+    max-width: 24rem;
+  }
+</style>

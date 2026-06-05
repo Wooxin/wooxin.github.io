@@ -145,6 +145,63 @@ body {
   border-color: var(--accent);
 }
 
+/* ── Tools dropdown ── */
+.nav-dropdown {
+  position: relative;
+}
+
+#top-mid-option .nav-dropdown {
+  min-width: 4.1rem;
+  padding: 0.34rem 0.95rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--text-tertiary);
+  cursor: default;
+}
+
+#top-mid-option .nav-dropdown:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 0.4rem;
+  padding: 0.4rem 0;
+  background: var(--bg-elevated);
+  border: var(--border-subtle);
+  border-radius: 0.65rem;
+  box-shadow: var(--shadow-md);
+  min-width: 8.5rem;
+  z-index: 200;
+}
+
+.nav-dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu .dropdown-item {
+  display: block;
+  padding: 0.45rem 1rem;
+  color: var(--text-secondary);
+  font-size: 0.84rem;
+  white-space: nowrap;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  transition: background 0.15s, color 0.15s;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background: var(--accent-light);
+  color: var(--accent);
+  border: none;
+}
+
 #top-right-option {
   gap: 0.35rem;
   position: relative;
