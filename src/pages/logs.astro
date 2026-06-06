@@ -7,6 +7,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <h1>日志</h1>
     <p style="color:var(--text-secondary);margin-bottom:1.5rem;">博客更新日志，记录每次改动的细节与思考。</p>
 
+    <h2>26/06/05 — 功能完善与文章扩充</h2>
+    <ol>
+      <li>实现 AI 摘要自动生成——火山引擎豆包 API，摘要存入 JSON 文件，构建时自动补缺（prebuild 钩子），文章顶部蓝紫渐变标签展示</li>
+      <li>文章更新日期自动检测——读取文件 mtime，修改后无需手动更新 frontmatter</li>
+      <li>时效警告改为基于创建日期判断——超过 3 个月黄色，超过 1 年红色，文章页顶部横幅 + 侧边栏徽标</li>
+      <li>全站 i18n 多语言支持——中英日韩四语，文章元信息、侧边栏、导航栏全覆盖，SPA 导航后自动重译</li>
+      <li>文章创建时间精确修正——对照 Hexo 原始数据恢复 17 篇文章的时分秒</li>
+      <li>全局字体统一——body 使用 system-ui，code 使用 ui-monospace，各平台原生字体零加载</li>
+      <li>导航栏字体一致性修复——a 标签和 span 标签共用同一套 CSS，消除工具与日志等项的视觉差异</li>
+      <li>阅读进度（Browsing-Progress）改为默认常显——箭头 + 百分比并排，不再需要 hover</li>
+      <li>防止相同页面重复跳转——点击当前文章标题不再触发动画和无意义请求</li>
+      <li>侧边栏滚动位置保持——点击文章后列表位置不丢失</li>
+      <li>修复工具页计算器 JS 解析失败问题</li>
+      <li>日志页 #2 #3 伪元素彻底消除——CSS 从 scoped 移到全局，解决首次加载闪现问题</li>
+    </ol>
+
     <h2>26/06/04 — Astro 迁移收尾</h2>
     <ol>
       <li>从 Hexo 完整迁移至 Astro，17 篇文章全部适配 Markdown 渲染</li>
@@ -104,30 +120,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </BaseLayout>
 
 <style>
-  article#logs h2::before,
-  article#logs h3::before,
-  article#logs h4::before,
-  article#logs h5::before,
-  article#logs h6::before {
-    content: none !important;
-  }
-  article#logs h2 {
-    font-size: 1.2rem;
-    margin-top: 0.6rem;
-    margin-bottom: 0.45rem;
-    color: var(--text-primary);
-  }
-  article#logs h2:first-of-type {
-    margin-top: 0;
-  }
-  article#logs ol {
-    padding-left: 1.5rem;
-    margin-bottom: 0.75rem;
-    list-style: none;
-  }
   article#logs ol li {
-    margin-bottom: 0.3rem;
-    line-height: 1.65;
     position: relative;
     padding-left: 1.4rem;
   }
@@ -138,9 +131,5 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     color: var(--accent);
     font-size: 0.82rem;
     font-weight: 600;
-  }
-  article#logs hr {
-    margin: 1.2rem 0;
-    border-color: var(--border-hr);
   }
 </style>

@@ -26,5 +26,20 @@
   "杂谈---鸿蒙分区.md": "未接触过鸿蒙的运维用户遭平台反复推送鸿蒙相关内容，反感部分粉丝“鸿蒙电脑不用分区就能解决C盘不足”的错误言论，用Linux操作演示反驳，并表示将怼这类言论。",
   "Archlinux滚挂修复.md": "分享Arch Linux滚动更新故障的常见症状、两种修复环境进入方式，六种典型场景的具体修复操作，以及六项防滚挂好习惯，助力用户快速修复系统无需重装。",
   "Archlinux运行vLLM与Ollama.md": "在配有NVIDIA显卡及CUDA环境的Arch单机上，可通过Ollama快速完成本地大模型的下载、调试与调用，借助vLLM的PagedAttention技术实现高显存利用率的高性能推理API部署，两者配合构建从模型尝试验证到生产服务的AI工作流。",
-  "Linux运维进阶实战.md": "聚焦生产环境Linux运维实战，覆盖Shell进阶技巧、文本处理三剑客用法、用户权限与磁盘管理、网络与进程性能排错、iptables配置及实用脚本片段，全是解决实际问题的核心操作。"
+  "Linux运维进阶实战.md": "聚焦生产环境Linux运维实战，覆盖Shell进阶技巧、文本处理三剑客用法、用户权限与磁盘管理、网络与进程性能排错、iptables配置及实用脚本片段，全是解决实际问题的核心操作。",
+  "关于双系统的建议.md": "双系统适用于虚拟机、WSL2无法满足的频繁本地编译、CUDA开发等场景，文中提供系统选择（新手选Ubuntu、进阶用Arch、追求环境复用选NixOS）、分区引导的核心配置方案，以及解决Windows快速启动、时钟同步等共存问题的实用技巧，同时强调重要数据需多备份。",
+  "游戏服务器搭建指南.md": "提供Minecraft、CS2、Terraria等12款游戏在CentOS 7/9、Ubuntu、Arch Linux、NixOS上的部署操作指南，可通过切换系统标签查看对应发行版的具体部署命令。",
+  "开服-ARK.md": "ARK服务端本体加DLC超60GB，建议搭配SSD、8GB以上内存运行，同时提供Ubuntu、CentOS等多类Linux发行版的服务端安装启动命令，以及需开放7777-7778、27015 UDP端口的设置说明。",
+  "开服-CS2.md": "提供Ubuntu、CentOS等多种Linux发行版下通过SteamCMD下载安装CS2服务器的具体命令，同时说明运行服务器所需GSLT Token的获取方式、默认UDP端口及多服务器部署与防火墙配置方法。",
+  "开服-Factorio.md": "提供Factorio无头服务端在Ubuntu、CentOS系列、Arch、NixOS等Linux发行版的安装与启动操作指令，同时给出默认UDP端口34197的开放方法。",
+  "开服-Minecraft.md": "提供Ubuntu、CentOS等多Linux发行版下Minecraft Java版服务器的部署步骤，涵盖环境搭建、服务端运行设置，同时包含系统服务配置、防火墙端口开放及性能参数优化方案。",
+  "开服-Palworld.md": "Palworld服务端需通过SteamCMD下载，建议配备8GB以上内存，提供Ubuntu、CentOS等多系统的部署命令，涵盖端口开放、配置文件设置，且因存在内存泄漏，需配置每天凌晨重启的系统服务与定时任务。",
+  "开服-Rust.md": "Rust服务端需8GB内存起步、核心越强越好，需通过SteamCMD部署，文中提供Ubuntu、CentOS 7/9、Arch、NixOS等不同Linux发行版的部署命令，同时需开放游戏端口28015和RCON端口28016的UDP与TCP协议。",
+  "开服-Terraria.md": "泰拉瑞亚官方服务端无需SteamCMD，提供Ubuntu、CentOS等多Linux发行版的安装启动命令，同时说明首次启动生成的serverconfig.txt关键配置及默认端口7777的放行操作。",
+  "开服-TF2和L4D2.md": "提供同为Source引擎的Team Fortress 2和Left 4 Dead 2在Ubuntu、CentOS等多款Linux发行版上的服务器部署命令，涵盖SteamCMD下载、srcds_run启动步骤，并列出Source引擎服务器的通用注意事项。",
+  "开服-Valheim.md": "提供无需Steam账号、依赖32位兼容库的Valheim服务器SteamCMD部署方案，涵盖Ubuntu、CentOS等多Linux发行版的具体命令，同时说明需开放的端口及服务器管理命令。",
+  "开服-七日杀.md": "针对Unity引擎游戏《七日杀》（App ID 294420），提供Ubuntu、CentOS等多款Linux发行版的服务端部署命令，同步给出serverconfig.xml关键配置参数及端口开放规则。",
+  "开服-饥荒.md": "饥荒联机版服务器需通过SteamCMD下载，需运行Master和Caves两个实例，文中提供Ubuntu、CentOS等多款Linux发行版的部署命令，同时说明服务器令牌获取方式及端口配置方法。",
+  "Linux与Windows服务器对比.md": "Linux并非在所有场景都适用，Windows Server在企业IT基础设施管理、.NET/SQL Server技术栈部署等场景更具优势；文章同时推荐了适配不同需求的Linux发行版，重点介绍NixOS凭借声明式配置解决传统Linux依赖冲突、环境不一致等痛点的特性。",
+  "为什么Windows不适合做服务器.md": "Windows Server因资源消耗大、自动重启更新、高授权费等多方面劣势，仅在AD域控、.NET老项目等特定场景适用；服务器场景更推荐适配需求的Linux发行版，如通用的Ubuntu Server LTS、稳定的Debian、RHEL平替Rocky/AlmaLinux，追求极致配置管理可选NixOS。"
 }

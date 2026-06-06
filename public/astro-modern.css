@@ -597,6 +597,39 @@ article#logs {
   padding: 1.55rem 1.75rem;
 }
 
+/* 覆盖 woxhome 的 #2 #3 等计数器伪元素 */
+article#logs h2::before,
+article#logs h3::before,
+article#logs h4::before,
+article#logs h5::before,
+article#logs h6::before {
+  content: none !important;
+}
+
+/* 日志页字体——移到这里确保 SPA 导航也生效 */
+article#logs h2 {
+  font-size: 1.2rem;
+  margin-top: 0.6rem;
+  margin-bottom: 0.45rem;
+  color: var(--text-primary);
+}
+article#logs h2:first-of-type {
+  margin-top: 0;
+}
+article#logs ol {
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+  list-style: none;
+}
+article#logs ol li {
+  margin-bottom: 0.3rem;
+  line-height: 1.65;
+}
+article#logs hr {
+  margin: 1.2rem 0;
+  border-color: var(--border-hr);
+}
+
 /* Staleness badges */
 .stale-badge {
   display: inline-flex;
@@ -679,6 +712,12 @@ article#logs {
   border: 0;
   border-top: var(--border-hr);
   margin: 1rem 0 1.35rem;
+}
+
+/* 正文顶部底部渐变模糊 */
+article#post .scrollable-container {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 2rem, black calc(100% - 2rem), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 2rem, black calc(100% - 2rem), transparent 100%);
 }
 
 #post-content {

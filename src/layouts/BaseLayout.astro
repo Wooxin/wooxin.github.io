@@ -26,7 +26,7 @@ function getStaleness(post) {
   return null;
 }
 
-const allPosts = await getCollection('posts', ({ data }) => data.published !== false);
+const allPosts = await getCollection('posts', ({ data }) => data && data.published !== false);
 allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 

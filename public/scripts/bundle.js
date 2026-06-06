@@ -626,6 +626,7 @@
     decorateCodeBlocks();
     initToc();
     initGiscus();
+    initRightMenu();
     // SPA 导航后重新应用语言
     applyLanguage(safeStorageGet('lang', 'zh-CN'));
   }
@@ -743,9 +744,43 @@
     const links = Array.from(document.querySelectorAll('#recent-posts .recent-post-item, a[href*="/posts/"]'));
     if (links.length) window.location.href = links[Math.floor(Math.random() * links.length)].href;
   };
+  function initRightMenu() {
+    var menu = document.getElementById('right-menu');
+    if (!menu || menu.dataset.bound) return;
+    menu.dataset.bound = 'true';
+
+    document.addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+      var sel = window.getSelection().toString().trim();
+      var copyBtn = document.getElementById('menu-text');
+      if (copyBtn) copyBtn.classList.toggle('hide', !sel);
+
+      var x = e.clientX, y = e.clientY;
+      var mw = menu.offsetWidth, mh = menu.offsetHeight;
+      if (x + mw > window.innerWidth) x -= mw;
+      if (y + mh > window.innerHeight) y -= mh;
+
+      menu.style.left = x + 'px';
+      menu.style.top = y + 'px';
+      menu.style.display = 'block';
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('#right-menu')) {
+        menu.style.display = 'none';
+      }
+    });
+  }
+
   window.rmf = {
     copySelect: function () {
-      document.execCommand('Copy');
+      var sel = window.getSelection().toString();
+      if (sel) {
+        navigator.clipboard.writeText(sel).catch(function() {
+          document.execCommand('Copy');
+        });
+      }
+      document.getElementById('right-menu').style.display = 'none';
     },
   };
   window.reinit = initPage;
@@ -804,4 +839,14 @@
     initMobileListToggle();
     initPage();
   });
+
+  // 游戏服务器文章——系统标签切换（全局，SPA 导航中 <script> 不会执行）
+  window.switchDistro = function(gameId, distro) {
+    document.querySelectorAll('#' + gameId + ' .distro-btn').forEach(function(b) { b.classList.remove('active'); });
+    var btn = document.querySelector('#' + gameId + ' .distro-btn[data-distro="' + distro + '"]');
+    if (btn) btn.classList.add('active');
+    document.querySelectorAll('#' + gameId + ' .distro-code').forEach(function(c) { c.style.display = 'none'; });
+    var target = document.getElementById(gameId + '-' + distro);
+    if (target) { target.style.display = 'block'; }
+  };
 })();
