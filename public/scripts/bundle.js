@@ -792,38 +792,24 @@
     btn.dataset.bound = 'true';
 
     function openPanel() {
-      midMid.style.display = 'flex';
-      midMid.style.position = 'fixed';
-      midMid.style.top = '3.2rem';
-      midMid.style.left = '0.5rem';
-      midMid.style.right = '0.5rem';
-      midMid.style.bottom = '1rem';
-      midMid.style.zIndex = '350';
-      midMid.style.maxHeight = 'none';
+      midMid.classList.add('mobile-overlay');
       btn.classList.add('open');
       btn.querySelector('span').innerHTML = '&#x2715;';
     }
 
     function closePanel() {
-      midMid.style.display = '';
-      midMid.style.position = '';
-      midMid.style.top = '';
-      midMid.style.left = '';
-      midMid.style.right = '';
-      midMid.style.bottom = '';
-      midMid.style.zIndex = '';
-      midMid.style.maxHeight = '';
+      midMid.classList.remove('mobile-overlay');
       btn.classList.remove('open');
       btn.querySelector('span').innerHTML = '&#x2630;';
     }
 
     btn.addEventListener('click', function () {
-      if (midMid.style.display === 'flex') closePanel();
+      if (midMid.classList.contains('mobile-overlay')) closePanel();
       else openPanel();
     });
 
     midMid.addEventListener('click', function (e) {
-      if (e.target.closest('a') && midMid.style.display === 'flex') {
+      if (e.target.closest('a') && midMid.classList.contains('mobile-overlay')) {
         setTimeout(closePanel, 200);
       }
     });
