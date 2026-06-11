@@ -1,23 +1,6 @@
-# Dependencies
-node_modules/
-
-# Build output
-dist/
-
-# Astro
-.astro/
-
-# Environment
-.env
-.env.*
-
-# OS
-.DS_Store
-Thumbs.db
-
-# IDE
-.vscode/
-.idea/
-
-# Logs
-*.log
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
