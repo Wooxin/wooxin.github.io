@@ -158,7 +158,11 @@ allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
             {allPosts.map((post, i) => {
               const stale = getStaleness(post);
               const effDate = getEffectiveDate(post);
-              const hasUpdate = !!(post.data.updated && post.data.updated.getTime() !== post.data.date.getTime());
+              const mtime = getFileMtime(post);
+              // 仅对 2026-06-12 之后的文章自动检测文件修改时间；之前的只认 frontmatter 的 updated
+              const autoCutoff = new Date('2026-06-12');
+              const hasUpdate = !!(post.data.updated && post.data.updated.getTime() !== post.data.date.getTime())
+                || !!(post.data.date >= autoCutoff && mtime && mtime > post.data.date);
               return (
               <a
                 class={`recent-post-item${i < 3 ? ' new-post' : ''}`}

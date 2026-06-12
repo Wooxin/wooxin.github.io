@@ -3,6 +3,8 @@
   "type": "module",
   "version": "1.0.0",
   "scripts": {
+    "new": "node scripts/new-post.mjs",
+    "predev": "node scripts/summarize.mjs",
     "dev": "astro dev --port 4000",
     "start": "astro dev --port 4000",
     "prebuild": "node scripts/summarize.mjs",
