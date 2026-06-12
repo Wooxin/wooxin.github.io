@@ -43,5 +43,6 @@
   "Linux与Windows服务器对比.md": "Linux并非在所有场景都适用，Windows Server在企业IT基础设施管理、.NET/SQL Server技术栈部署等场景更具优势；文章同时推荐了适配不同需求的Linux发行版，重点介绍NixOS凭借声明式配置解决传统Linux依赖冲突、环境不一致等痛点的特性。",
   "为什么Windows不适合做服务器.md": "Windows Server因资源消耗大、自动重启更新、高授权费等多方面劣势，仅在AD域控、.NET老项目等特定场景适用；服务器场景更推荐适配需求的Linux发行版，如通用的Ubuntu Server LTS、稳定的Debian、RHEL平替Rocky/AlmaLinux，追求极致配置管理可选NixOS。",
   "Rust-Tauri2-疑难杂症.md": "分享用Rust+Tauri2开发三个桌面应用时的多类疑难踩坑细节及解决方案，核心聚焦Tauri IPC层面的沉默失败问题，涉及serde反序列化、字段命名转换、rusqlite查询处理、UI阻塞规避、单实例实现、SQLite性能优化及Windows路径处理等场景。",
-  "Nix踩坑记录.md": "这篇文章梳理了NixOS新手常遇的模式选择、更新故障、配置语法错误、磁盘占用、输入法失效、双系统启动等13类核心坑点，并针对每个问题给出具体解决方案，同时建议新手直接从Flakes模式入手，先熟悉系统配置再使用Home Manager。"
+  "Nix踩坑记录.md": "这篇文章梳理了NixOS新手常遇的模式选择、更新故障、配置语法错误、磁盘占用、输入法失效、双系统启动等13类核心坑点，并针对每个问题给出具体解决方案，同时建议新手直接从Flakes模式入手，先熟悉系统配置再使用Home Manager。",
+  "哪个AIAgent最好.md": "横评 Claude Code、Codex、Hermes Agent、Cursor、Copilot、OpenCode、Aider 七款主流 AI Agent，从全自动开发、代码审查、多 Agent 协同、本地模型兼容等维度逐一对比，给出不同预算和场景下的选型建议，并附模型匹配方案和实测配置参考。"
 }
