@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-import { getPostSlug, getEffectiveDate, getFileMtime } from '../../utils/posts';
+import { getPostSlug, getEffectiveDate, getFileMtime, fixZodDate } from '../../utils/posts';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => data.published !== false);
@@ -24,7 +24,7 @@ const tags = post.data.tags || [];
 const now = new Date();
 const effDate = getEffectiveDate(post);
 const fileMtime = getFileMtime(post);
-const updateDate = post.data.updated || (fileMtime && fileMtime > post.data.date ? fileMtime : post.data.date);
+const updateDate = getEffectiveDate(post);
 const ageMs = now.getTime() - post.data.date.getTime();
 const staleLevel = ageMs > 365 * 24 * 60 * 60 * 1000 ? 'red' : ageMs > 90 * 24 * 60 * 60 * 1000 ? 'yellow' : null;
 const hasUpdate = updateDate.getTime() !== post.data.date.getTime();
@@ -65,9 +65,21 @@ const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 4);
       </div>
       <div id="post-date" class="d-flex flex-row" style="display:flex;flex-wrap:wrap;align-items:center;gap:0.3rem;margin-bottom:0.4rem;">
         <span class="post-meta-label" data-i18n="post.created">创建:</span>
-        <span class="post-meta-value">{post.data.date.toISOString().replace('T', ' ').slice(0,19)}</span>
+        <span class="post-meta-value">{
+          (() => {
+            const d = fixZodDate(post.data.date);
+            const pad = n => String(n).padStart(2, '0');
+            return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+          })()
+        }</span>
         <span class="post-meta-label" data-i18n="post.updated">更新:</span>
-        <span class="post-meta-value">{updateDate.toISOString().replace('T', ' ').slice(0,19)}</span>
+        <span class="post-meta-value">{
+          (() => {
+            const d = getEffectiveDate(post);
+            const pad = n => String(n).padStart(2, '0');
+            return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+          })()
+        }</span>
         <span class="post-meta-label" data-i18n="post.words">字数:</span>
         <span id="post-count-body"><span class="post-meta-value"><a href="javascript:initWordCountOnly()">0</a> <span data-i18n="post.char_unit">字</span></span></span>
         <span class="post-meta-label" data-i18n="post.time">耗时:</span>
@@ -128,7 +140,7 @@ const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 4);
     "@type": "Article",
     "headline": post.data.title,
     "datePublished": post.data.date.toISOString().slice(0,10),
-    "dateModified": (post.data.updated || post.data.date).toISOString().slice(0,10),
+    "dateModified": getEffectiveDate(post).toISOString().slice(0,10),
     "author": { "@type": "Person", "name": "Wooxin" }
   })} />
 

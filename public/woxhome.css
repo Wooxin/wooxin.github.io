@@ -1845,13 +1845,15 @@ nav#textTags #textTags-nav .reading-title .reading-title-text {
 	visibility: visible
 }
 
-#top-right #top-right-option>div:hover .colormode-toggle>:first-child,
+/* Dark mode: swap color toggle icons */
+html[data-theme='dark'] #top-right #top-right-option .colormode-toggle>:first-child { visibility: hidden; }
+html[data-theme='dark'] #top-right #top-right-option .colormode-toggle>:nth-child(2) { visibility: visible; }
+
 #top-right #top-right-option>div:hover .progress-toggle>:first-child,
 #top-right #top-right-option>div:hover .search-icon>:first-child {
 	visibility: hidden
 }
 
-#top-right #top-right-option>div:hover .colormode-toggle>:nth-child(2),
 #top-right #top-right-option>div:hover .progress-toggle>:nth-child(2),
 #top-right #top-right-option>div:hover .search-icon>:nth-child(2) {
 	visibility: visible

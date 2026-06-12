@@ -16,7 +16,7 @@ tags:
 description: 2026 年主流 AI 编程 Agent 横评——Claude Code、Codex、Hermes Agent、Cursor、Copilot、OpenCode、Aider，从任务适配、模型绑定、成本、开源四个维度逐一分析。
 ---
 
-> 写在最前面：写代码就用Claude或者Codex, 勉强可以实现完全自动化
+> 写在最前面：写代码就用Claude或者Codex，勉强可以实现完全自动化。
 
 这半年我差不多把市面上主流的 AI Agent 都用了一遍。从最开始用 ChatGPT 网页版，到 Copilot 补全，再到 Claude Code 和 Codex 做全自动开发，最后甚至自己搭了一个 Hermes Agent 来调度多个 Agent 协同干活。
 

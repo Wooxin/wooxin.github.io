@@ -1,6 +1,7 @@
 import type { CollectionEntry } from 'astro:content';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 type PostEntry = CollectionEntry<'posts'>;
 
@@ -16,8 +17,9 @@ function hashString(value: string) {
 /** 读取文章 .md 文件的最后修改时间 */
 export function getFileMtime(post: PostEntry): Date | null {
   try {
-    const filePath = path.join('src/content/posts', post.id.replace(/^posts\//, ''));
-    const stat = fs.statSync(filePath);
+    // Astro's cwd is always the project root in dev/build
+    const relPath = path.join('src/content/posts', post.id.replace(/^posts[\\/]/, ''));
+    const stat = fs.statSync(relPath);
     return stat.mtime;
   } catch {
     return null;
@@ -28,7 +30,11 @@ export function getFileMtime(post: PostEntry): Date | null {
 export function getEffectiveDate(post: PostEntry): Date {
   if (post.data.updated) return post.data.updated;
   const mtime = getFileMtime(post);
-  if (mtime && mtime > post.data.date) return mtime;
+  if (mtime) {
+    // Use absolute diff to handle timezone discrepancies in frontmatter date parsing.
+    // If mtime differs from declared date by >1s, the file has been modified.
+    if (Math.abs(mtime.getTime() - post.data.date.getTime()) > 1000) return mtime;
+  }
   return post.data.date;
 }
 
@@ -44,4 +50,10 @@ export function getPostSlug(post: PostEntry) {
 
 export function getPostUrl(post: PostEntry) {
   return `/posts/${getPostSlug(post)}/`;
+}
+
+/** Zod 把 frontmatter 的 date（无时区标识）解析为 UTC，但实际是本地时间。修正之。 */
+export function fixZodDate(d: Date): Date {
+  const offset = d.getTimezoneOffset(); // 分钟，UTC+8 → -480
+  return new Date(d.getTime() + offset * 60 * 1000);
 }
