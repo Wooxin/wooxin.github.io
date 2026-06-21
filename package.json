@@ -4,9 +4,10 @@
   "version": "1.0.0",
   "scripts": {
     "new": "node scripts/new-post.mjs",
-    "predev": "node scripts/summarize.mjs",
-    "dev": "astro dev --port 4000",
-    "start": "astro dev --port 4000",
+    "dev": "node scripts/dev.mjs",
+    "s": "node scripts/dev.mjs",
+    "server": "node scripts/dev.mjs",
+    "start": "node scripts/dev.mjs",
     "prebuild": "node scripts/summarize.mjs",
     "build": "astro build",
     "preview": "astro preview"
