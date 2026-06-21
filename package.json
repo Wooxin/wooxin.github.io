@@ -10,13 +10,19 @@
     "start": "node scripts/dev.mjs",
     "prebuild": "node scripts/summarize.mjs",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy",
+    "cf-typegen": "wrangler types"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "12",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.3",
     "@google/generative-ai": "^0.24.1",
     "astro": "^5.18.2",
     "undici": "^6.26.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.103.0"
   }
 }
